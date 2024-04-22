@@ -1,4 +1,4 @@
-package com.kodilla.currencyexchange.domain;
+package com.kodilla.currencyexchangebackend.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true)
-    private long id;
+    private Long id;
 
     @NonNull
     private String firstname;

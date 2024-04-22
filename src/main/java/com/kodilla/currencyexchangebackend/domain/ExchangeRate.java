@@ -1,11 +1,13 @@
-package com.kodilla.currencyexchange.domain;
+package com.kodilla.currencyexchangebackend.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -17,7 +19,7 @@ public class ExchangeRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true)
-    private long id;
+    private Long id;
 
     @NonNull
     @ManyToOne
@@ -33,5 +35,5 @@ public class ExchangeRate {
     private BigDecimal rate;
 
     @NonNull
-    private Date date;
+    private LocalDate localDate;
 }

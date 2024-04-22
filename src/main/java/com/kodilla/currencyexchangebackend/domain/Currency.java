@@ -1,4 +1,4 @@
-package com.kodilla.currencyexchange.domain;
+package com.kodilla.currencyexchangebackend.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -17,7 +17,7 @@ public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true)
-    private long Id;
+    private Long Id;
 
     @NonNull
     @Column(unique = true)
@@ -32,5 +32,7 @@ public class Currency {
 
     @OneToMany(mappedBy = "targetCurrency")
     private List<ExchangeRate> targetExchangeRates = new ArrayList<>();
+
+    private boolean active = true;
 
 }

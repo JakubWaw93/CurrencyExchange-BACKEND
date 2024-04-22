@@ -1,4 +1,4 @@
-package com.kodilla.currencyexchange;
+package com.kodilla.currencyexchangebackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

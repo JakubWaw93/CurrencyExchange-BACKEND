@@ -1,4 +1,4 @@
-package com.kodilla.currencyexchange.domain;
+package com.kodilla.currencyexchangebackend.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class StationaryOffice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private long Id;
+    private Long Id;
 
     @NonNull
     @Column(unique = true)
@@ -22,5 +22,7 @@ public class StationaryOffice {
 
     @NonNull
     private String phone;
+
+    private boolean active = true;
 
 }
