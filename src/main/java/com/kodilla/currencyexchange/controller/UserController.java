@@ -1,6 +1,6 @@
-package com.kodilla.currencyexchangebackend.controller;
+package com.kodilla.currencyexchange.controller;
 
-import com.kodilla.currencyexchangebackend.domain.UserDto;
+import com.kodilla.currencyexchange.domain.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

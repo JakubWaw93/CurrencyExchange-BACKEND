@@ -1,4 +1,4 @@
-package com.kodilla.currencyexchangebackend.domain;
+package com.kodilla.currencyexchange.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -35,5 +35,15 @@ public class ExchangeRate {
     private BigDecimal rate;
 
     @NonNull
-    private LocalDate localDate;
+    private LocalDateTime localDateTime;
+
+    @Builder
+    public ExchangeRate(Long id, @NonNull Currency baseCurrency, @NonNull Currency targetCurrency,
+                        @NonNull BigDecimal rate, @NonNull LocalDateTime localDateTime) {
+        this.id = id;
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
+        this.rate = rate;
+        this.localDateTime = localDateTime;
+    }
 }

@@ -1,6 +1,6 @@
-package com.kodilla.currencyexchangebackend.controller;
+package com.kodilla.currencyexchange.controller;
 
-import com.kodilla.currencyexchangebackend.domain.CurrencyDto;
+import com.kodilla.currencyexchange.domain.CurrencyDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +15,18 @@ public class CurrencyController {
 
     @GetMapping
     public ResponseEntity<List<CurrencyDto>> getAllCurrencies() {
+        List<CurrencyDto> currencyDtoList = new ArrayList<>();
+        return ResponseEntity.ok(currencyDtoList);
+    }
+
+    @GetMapping("/standard")
+    public ResponseEntity<List<CurrencyDto>> getAllStandardCurrencies() {
+        List<CurrencyDto> currencyDtoList = new ArrayList<>();
+        return ResponseEntity.ok(currencyDtoList);
+    }
+
+    @GetMapping("/crypto")
+    public ResponseEntity<List<CurrencyDto>> getAllCryptoCurrencies() {
         List<CurrencyDto> currencyDtoList = new ArrayList<>();
         return ResponseEntity.ok(currencyDtoList);
     }

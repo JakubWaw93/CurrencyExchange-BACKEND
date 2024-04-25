@@ -1,6 +1,6 @@
-package com.kodilla.currencyexchangebackend.controller;
+package com.kodilla.currencyexchange.controller;
 
-import com.kodilla.currencyexchangebackend.domain.ExchangeRateDto;
+import com.kodilla.currencyexchange.domain.ExchangeRateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class ExchangeRateController {
     public ResponseEntity<ExchangeRateDto> getExchangeRateById(@PathVariable Long ExchangeRateId) {
         ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
                 .id(ExchangeRateId)
-                .localDate(LocalDate.now())
+                .localDateTime(LocalDate.now())
                 .baseCurrencyId(1L)
                 .targetCurrencyId(2L)
                 .rate(new BigDecimal("500.256"))
@@ -37,7 +37,7 @@ public class ExchangeRateController {
     public ResponseEntity<ExchangeRateDto> getExchangeRateByIds(@PathVariable Long baseId, @PathVariable Long targetId) {
         ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
                 .id(1L)
-                .localDate(LocalDate.now())
+                .localDateTime(LocalDate.now())
                 .baseCurrencyId(baseId)
                 .targetCurrencyId(targetId)
                 .rate(new BigDecimal("500.256"))
@@ -51,13 +51,13 @@ public class ExchangeRateController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("baseid/{baseId}")
+    @GetMapping("currencyId/{baseId}")
     public ResponseEntity<List<ExchangeRateDto>> getRatesForCurrencyById(@PathVariable Long baseId) {
         List<ExchangeRateDto> exchangeRatesDtosForThisCurrency = new ArrayList<>();
         return ResponseEntity.ok(exchangeRatesDtosForThisCurrency);
     }
 
-    @GetMapping("basecode/{baseCode}")
+    @GetMapping("currencyCode/{baseCode}")
     public ResponseEntity<List<ExchangeRateDto>> getRatesForCurrencyByCode(@PathVariable Long baseCode) {
         List<ExchangeRateDto> exchangeRatesDtosForThisCurrency = new ArrayList<>();
         return ResponseEntity.ok(exchangeRatesDtosForThisCurrency);
@@ -67,7 +67,7 @@ public class ExchangeRateController {
     public ResponseEntity<ExchangeRateDto> createExchangeRate() {
         ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
                 .id(1L)
-                .localDate(LocalDate.now())
+                .localDateTime(LocalDate.now())
                 .baseCurrencyId(1L)
                 .targetCurrencyId(2L)
                 .rate(new BigDecimal("500.256"))

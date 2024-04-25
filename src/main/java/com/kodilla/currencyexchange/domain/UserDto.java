@@ -1,9 +1,11 @@
-package com.kodilla.currencyexchangebackend.domain;
+package com.kodilla.currencyexchange.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,6 +16,8 @@ public class UserDto {
     private String firstname;
     private String lastname;
     private String emailAddress;
+    @Builder.Default
+    private List<Long> transactionsIds = new ArrayList<>();
     private String apiKey;
     @Builder.Default
     private boolean active = true;

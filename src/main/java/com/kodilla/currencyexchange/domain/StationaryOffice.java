@@ -1,6 +1,7 @@
-package com.kodilla.currencyexchangebackend.domain;
+package com.kodilla.currencyexchange.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -25,4 +26,12 @@ public class StationaryOffice {
 
     private boolean active = true;
 
+    @Builder
+
+    public StationaryOffice(Long id, @NonNull String address, @NonNull String phone, boolean active) {
+        Id = id;
+        this.address = address;
+        this.phone = phone;
+        this.active = active;
+    }
 }

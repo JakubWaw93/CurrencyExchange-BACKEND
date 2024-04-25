@@ -1,4 +1,4 @@
-package com.kodilla.currencyexchangebackend.domain;
+package com.kodilla.currencyexchange.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +16,5 @@ public class ExchangeRateDto {
     private Long baseCurrencyId;
     private Long targetCurrencyId;
     private BigDecimal rate;
-    private LocalDate localDate;
+    private LocalDate localDateTime;
 }

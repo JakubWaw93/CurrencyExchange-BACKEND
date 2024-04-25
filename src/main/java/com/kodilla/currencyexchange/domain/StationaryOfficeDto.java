@@ -1,9 +1,8 @@
-package com.kodilla.currencyexchangebackend.domain;
+package com.kodilla.currencyexchange.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
