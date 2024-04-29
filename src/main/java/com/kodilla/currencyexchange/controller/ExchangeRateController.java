@@ -1,12 +1,16 @@
 package com.kodilla.currencyexchange.controller;
 
+import com.kodilla.currencyexchange.domain.ExchangeRate;
 import com.kodilla.currencyexchange.domain.ExchangeRateDto;
+import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
+import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
+import com.kodilla.currencyexchange.mapper.ExchangeRateMapper;
+import com.kodilla.currencyexchange.service.ExchangeRateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,73 +20,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExchangeRateController {
 
+    private final ExchangeRateService exchangeRateService;
+    private final ExchangeRateMapper exchangeRateMapper;
+
     @GetMapping
     public ResponseEntity<List<ExchangeRateDto>> getAllExchangeRates() {
-        List<ExchangeRateDto> exchangeRateDtoList = new ArrayList<>();
-        return ResponseEntity.ok(exchangeRateDtoList);
+        List<ExchangeRate> exchangeRateList = exchangeRateService.getAllExchangeRates();
+        return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDtoList(exchangeRateList));
     }
 
-    @GetMapping("/{ExchangeRateId}")
-    public ResponseEntity<ExchangeRateDto> getExchangeRateById(@PathVariable Long ExchangeRateId) {
-        ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
-                .id(ExchangeRateId)
-                .lastUpdateTime(LocalDateTime.now())
-                .baseCurrencyId(1L)
-                .targetCurrencyId(2L)
-                .rate(new BigDecimal("500.256"))
-                .build();
-        return ResponseEntity.ok(exchangeRateDto);
-    }
-
-    @GetMapping("/ids/{baseId}/{targetId}")
-    public ResponseEntity<ExchangeRateDto> getExchangeRateByIds(@PathVariable Long baseId, @PathVariable Long targetId) {
-        ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
-                .id(1L)
-                .lastUpdateTime(LocalDateTime.now())
-                .baseCurrencyId(baseId)
-                .targetCurrencyId(targetId)
-                .rate(new BigDecimal("500.256"))
-                .build();
-        return ResponseEntity.ok(exchangeRateDto);
+    @GetMapping("/{exchangeRateId}")
+    public ResponseEntity<ExchangeRateDto> getExchangeRateById(@PathVariable Long exchangeRateId) throws ExchangeRateNotFoundException {
+        ExchangeRate exchangeRate = exchangeRateService.getExchangeRateById(exchangeRateId);
+        return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDto(exchangeRate));
     }
 
     @GetMapping("/codes/{baseCode}/{targetCode}")
-    public ResponseEntity<ExchangeRateDto> getExchangeRateByCodes(@PathVariable String baseCode, @PathVariable String targetCode) {
-        //konwersja poprzez wyszukanie konkretnej waluty i jej Id na podstawie Code.
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("currencyId/{baseId}")
-    public ResponseEntity<List<ExchangeRateDto>> getRatesForCurrencyById(@PathVariable Long baseId) {
-        List<ExchangeRateDto> exchangeRatesDtosForThisCurrency = new ArrayList<>();
-        return ResponseEntity.ok(exchangeRatesDtosForThisCurrency);
+    public ResponseEntity<ExchangeRateDto> getExchangeRateByCodes(@PathVariable String baseCode, @PathVariable String targetCode) throws ExchangeRateNotFoundException, CurrencyNotFoundException {
+        ExchangeRate exchangeRate = exchangeRateService.getExchangeRateByCurrencyCodes(baseCode, targetCode);
+        return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDto(exchangeRate));
     }
 
     @GetMapping("currencyCode/{baseCode}")
-    public ResponseEntity<List<ExchangeRateDto>> getRatesForCurrencyByCode(@PathVariable Long baseCode) {
-        List<ExchangeRateDto> exchangeRatesDtosForThisCurrency = new ArrayList<>();
-        return ResponseEntity.ok(exchangeRatesDtosForThisCurrency);
+    public ResponseEntity<List<ExchangeRateDto>> getRatesForCurrencyByCode(@PathVariable String baseCode) {
+        List<ExchangeRate> exchangeRatesForThisCurrency = exchangeRateService.getExchangeRatesForCurrencyByItsCode(baseCode);
+        return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDtoList(exchangeRatesForThisCurrency));
     }
 
     @PostMapping
-    public ResponseEntity<ExchangeRateDto> createExchangeRate() {
-        ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
-                .id(1L)
-                .lastUpdateTime(LocalDateTime.now())
-                .baseCurrencyId(1L)
-                .targetCurrencyId(2L)
-                .rate(new BigDecimal("500.256"))
-                .build();
-        return ResponseEntity.ok(exchangeRateDto);
+    public ResponseEntity<ExchangeRateDto> createExchangeRate(@RequestBody ExchangeRateDto exchangeRateDto) throws CurrencyNotFoundException {
+        ExchangeRate exchangeRate = exchangeRateMapper.mapToExchangeRate(exchangeRateDto);
+        ExchangeRate savedExchangeRate = exchangeRateService.saveExchangeRate(exchangeRate);
+        return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDto(savedExchangeRate));
     }
 
-    @PutMapping
-    public ResponseEntity<ExchangeRateDto> updateExchangeRate(@RequestBody ExchangeRateDto exchangeRateDto) {
-        return ResponseEntity.ok(exchangeRateDto);
-        //nie wiem jeszzcze czy będę tego używał, plan jest zrobić w service automatyczny
-        //update ExchangeRates za pomocą shedulera, może tu zrobię update na żądanie, ale wtedy
-        // chyba bez @RequestBody tylko @PutMapping(update).
-    }
-
-    //nie widzę powodu by usuwać pozycję w tej encji ale jeszcze pomyślimy
 }

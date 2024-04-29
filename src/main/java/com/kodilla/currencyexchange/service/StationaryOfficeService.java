@@ -18,7 +18,7 @@ public class StationaryOfficeService {
         return stationaryOfficeRepository.findAllByActiveTrue();
     }
 
-    public StationaryOffice getOfficeById(final Long id) {
+    public StationaryOffice getOfficeById(final Long id) throws StationaryOfficeNotFoundException {
         return stationaryOfficeRepository.findByIdAndActiveTrue(id).orElseThrow(StationaryOfficeNotFoundException::new);
     }
 
@@ -26,7 +26,7 @@ public class StationaryOfficeService {
         return stationaryOfficeRepository.save(stationaryOffice);
     }
 
-    public void deleteStationaryOffice(final Long id) {
+    public void deleteStationaryOffice(final Long id) throws StationaryOfficeNotFoundException {
         stationaryOfficeRepository.delete(stationaryOfficeRepository.findByIdAndActiveTrue(id).orElseThrow(StationaryOfficeNotFoundException::new));
     }
 }

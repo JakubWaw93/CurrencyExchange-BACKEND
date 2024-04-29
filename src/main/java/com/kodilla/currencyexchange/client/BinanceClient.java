@@ -3,6 +3,8 @@ package com.kodilla.currencyexchange.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kodilla.currencyexchange.domain.Currency;
 import com.kodilla.currencyexchange.domain.ExchangeRate;
+import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
+import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
 import com.kodilla.currencyexchange.mapper.ExchangeRateMapper;
 import com.kodilla.currencyexchange.service.CurrencyService;
 import com.kodilla.currencyexchange.service.ExchangeRateService;
@@ -38,7 +40,12 @@ public class BinanceClient {
         currencies.forEach(currency -> {
             ExchangeRate exchangeRate = getExchangeRateFromBinanceApi(currency.getCode());
             if (exchangeRate != null) {
-                ExchangeRate existingExchangeRate = exchangeRateService.getExchangeRateByCurrencyCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode());
+                ExchangeRate existingExchangeRate = null;
+                try {
+                    existingExchangeRate = exchangeRateService.getExchangeRateByCurrencyCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode());
+                } catch (ExchangeRateNotFoundException | CurrencyNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
                 if(existingExchangeRate != null) {
                     existingExchangeRate.setRate(exchangeRate.getRate());
                     existingExchangeRate.setLastUpdateTime(exchangeRate.getLastUpdateTime());

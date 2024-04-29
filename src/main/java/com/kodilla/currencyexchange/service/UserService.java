@@ -20,11 +20,11 @@ public class UserService {
         return userRepository.findAllByActiveTrue();
     }
 
-    public User getUserById(final Long id) {
+    public User getUserById(final Long id) throws UserNotFoundException {
         return userRepository.findByIdAndActiveTrue(id).orElseThrow(UserNotFoundException::new);
     }
 
-    public User getUserByEmail(final String email) {
+    public User getUserByEmail(final String email) throws UserNotFoundException {
         return userRepository.findByEmailAddressAndActiveTrue(email).orElseThrow(UserNotFoundException::new);
     }
 
@@ -32,7 +32,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void deleteUser(final Long id) {
+    public void deleteUser(final Long id) throws UserNotFoundException {
         userRepository.delete(userRepository.findByIdAndActiveTrue(id).orElseThrow(UserNotFoundException::new));
     }
 

@@ -1,5 +1,5 @@
 package com.kodilla.currencyexchange.exception;
 
-public class StationaryOfficeNotFoundException extends RuntimeException {
+public class StationaryOfficeNotFoundException extends Exception {
 
 }

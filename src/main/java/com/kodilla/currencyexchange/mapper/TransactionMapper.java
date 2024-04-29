@@ -21,7 +21,7 @@ public class TransactionMapper {
     private final CurrencyRepository currencyRepository;
     private final ExchangeRateRepository exchangeRateRepository;
 
-    public Transaction mapToTransaction(final TransactionDto transactionDto) {
+    public Transaction mapToTransaction(final TransactionDto transactionDto) throws UserNotFoundException, ExchangeRateNotFoundException, CurrencyNotFoundException {
         return Transaction.builder()
                 .id(transactionDto.getId())
                 .user(userRepository.findByIdAndActiveTrue(transactionDto.getUserId()).orElseThrow(UserNotFoundException::new))

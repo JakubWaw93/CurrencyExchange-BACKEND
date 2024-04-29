@@ -4,6 +4,8 @@ import com.kodilla.currencyexchange.client.BinanceExchangeRateResponse;
 import com.kodilla.currencyexchange.client.NbpExchangeRateResponse;
 import com.kodilla.currencyexchange.domain.ExchangeRate;
 import com.kodilla.currencyexchange.domain.ExchangeRateDto;
+import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
+import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
 import com.kodilla.currencyexchange.service.CurrencyService;
 import com.kodilla.currencyexchange.service.ExchangeRateService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class ExchangeRateMapper {
     private final ExchangeRateService exchangeRateService;
     private final CurrencyService currencyService;
 
-    public ExchangeRate mapNbpResponseToExchangeRate(NbpExchangeRateResponse response) {
+    public ExchangeRate mapNbpResponseToExchangeRate(NbpExchangeRateResponse response) throws CurrencyNotFoundException {
         return ExchangeRate.builder()
                 .baseCurrency(currencyService.getCurrencyByCode(response.getCode()))
                 .targetCurrency(currencyService.getCurrencyByCode("PLN"))
@@ -29,7 +31,7 @@ public class ExchangeRateMapper {
                 .build();
     }
 
-    public ExchangeRate mapBinanceResponseToExchangeRate(final BinanceExchangeRateResponse response, final String baseCurrencyCode) {
+    public ExchangeRate mapBinanceResponseToExchangeRate(final BinanceExchangeRateResponse response, final String baseCurrencyCode) throws CurrencyNotFoundException, ExchangeRateNotFoundException {
         return ExchangeRate.builder()
                 .baseCurrency(currencyService.getCurrencyByCode(baseCurrencyCode))
                 .targetCurrency(currencyService.getCurrencyByCode("PLN"))
@@ -38,7 +40,7 @@ public class ExchangeRateMapper {
                 .build();
     }
 
-    public ExchangeRate mapToExchangeRate(final ExchangeRateDto exchangeRateDto) {
+    public ExchangeRate mapToExchangeRate(final ExchangeRateDto exchangeRateDto) throws CurrencyNotFoundException {
         return ExchangeRate.builder()
                 .id(exchangeRateDto.getId())
                 .baseCurrency(currencyService.getCurrencyById(exchangeRateDto.getBaseCurrencyId()))

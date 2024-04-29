@@ -25,11 +25,12 @@ public class ExchangeRateService {
         return exchangeRateRepository.findAll();
     }
 
-    public ExchangeRate getExchangeRateById(final Long id) {
+    public ExchangeRate getExchangeRateById(final Long id) throws ExchangeRateNotFoundException {
         return exchangeRateRepository.findById(id).orElseThrow(ExchangeRateNotFoundException::new);
     }
 
-    public ExchangeRate getExchangeRateByCurrencyCodes(final String baseCurrencyCode, final String targetCurrencyCode) {
+    public ExchangeRate getExchangeRateByCurrencyCodes(final String baseCurrencyCode, final String targetCurrencyCode) throws ExchangeRateNotFoundException, CurrencyNotFoundException {
+        calculateRates(baseCurrencyCode, targetCurrencyCode);
         return exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode
                 (baseCurrencyCode, targetCurrencyCode).orElseThrow
                 (ExchangeRateNotFoundException::new);
@@ -43,10 +44,9 @@ public class ExchangeRateService {
         return exchangeRateRepository.save(exchangeRate);
     }
 
-    public ExchangeRate calculateRates(final String baseCurrencyCode, final String targetCurrencyCode) {
+    public ExchangeRate calculateRates(final String baseCurrencyCode, final String targetCurrencyCode) throws CurrencyNotFoundException, ExchangeRateNotFoundException {
         BigDecimal exchangeRateForPLN = getExchangeRateByCurrencyCodes(baseCurrencyCode, "PLN").getRate();
-        BigDecimal newRate=null;
-
+        BigDecimal newRate;
         if (!targetCurrencyCode.equals("PLN")) {
             if (currencyService.getCurrencyByCode(targetCurrencyCode).isCrypto()) {
 
@@ -59,23 +59,19 @@ public class ExchangeRateService {
                 BigDecimal exchangeRateForTargetCurrency = getExchangeRateByCurrencyCodes(targetCurrencyCode, "PLN").getRate();
                 newRate = exchangeRateForPLN.divide(exchangeRateForTargetCurrency);
             }
-        }
-        ExchangeRate exchangeRate = ExchangeRate.builder()
-                .baseCurrency(currencyService.getCurrencyByCode(baseCurrencyCode))
-                .targetCurrency(currencyService.getCurrencyByCode(targetCurrencyCode))
-                .rate(newRate)
-                .lastUpdateTime(LocalDateTime.now())
-                .build();
+            ExchangeRate exchangeRate = ExchangeRate.builder()
+                    .baseCurrency(currencyService.getCurrencyByCode(baseCurrencyCode))
+                    .targetCurrency(currencyService.getCurrencyByCode(targetCurrencyCode))
+                    .rate(newRate)
+                    .lastUpdateTime(LocalDateTime.now())
+                    .build();
 
-        return saveExchangeRate(exchangeRate);
+            return saveExchangeRate(exchangeRate);
+        }
+        return null;
         //może jednak zrezygnuję z tych zamian, i dla ułatwienia dla wszystkich ExchangeRate target będzie w PLN
 
     }
-
-
-
-
-
 
 
 }

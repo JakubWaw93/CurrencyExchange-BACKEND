@@ -1,5 +1,5 @@
 package com.kodilla.currencyexchange.exception;
 
-public class ExchangeRateNotFoundException extends RuntimeException {
+public class ExchangeRateNotFoundException extends Exception {
 
 }

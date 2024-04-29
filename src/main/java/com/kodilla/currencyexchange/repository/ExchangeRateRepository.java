@@ -8,10 +8,7 @@ import java.util.Optional;
 
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long> {
 
-    Optional<ExchangeRate> findByBaseCurrencyIdAndTargetCurrencyId(Long baseCurrencyId, Long targetCurrencyId);
     Optional<ExchangeRate> findByBaseCurrencyCodeAndTargetCurrencyCode(String baseCurrencyCode, String targetCurrencyCode);
-
-    List<ExchangeRate> findAllByBaseCurrencyId(Long currencyId);
     List<ExchangeRate> findAllByBaseCurrencyCode(String currencyCode);
 
 

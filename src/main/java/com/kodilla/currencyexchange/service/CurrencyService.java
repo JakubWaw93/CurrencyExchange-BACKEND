@@ -26,11 +26,11 @@ public class CurrencyService {
         return currencyRepository.findAllByCryptoTrueAndActiveTrue();
     }
 
-    public Currency getCurrencyById(final Long id) {
+    public Currency getCurrencyById(final Long id) throws CurrencyNotFoundException {
         return currencyRepository.findByIdAndActiveTrue(id).orElseThrow(CurrencyNotFoundException::new);
     }
 
-    public Currency getCurrencyByCode(final String code) {
+    public Currency getCurrencyByCode(final String code) throws CurrencyNotFoundException {
         return currencyRepository.findByCodeAndActiveTrue(code).orElseThrow(CurrencyNotFoundException::new);
     }
 

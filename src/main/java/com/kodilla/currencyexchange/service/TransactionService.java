@@ -22,7 +22,7 @@ public class TransactionService {
         return transactionRepository.findAllByUserId(userId);
     }
 
-    public Transaction getTransactionById(final Long transactionId) {
+    public Transaction getTransactionById(final Long transactionId) throws TransactionNotFoundException {
         return transactionRepository.findById(transactionId).orElseThrow(TransactionNotFoundException::new);
     }
 
