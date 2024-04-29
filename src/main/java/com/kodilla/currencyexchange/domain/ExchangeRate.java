@@ -21,14 +21,15 @@ public class ExchangeRate {
     private Long id;
 
     @NonNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "base_currency_id")
     private Currency baseCurrency;
 
     @NonNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "target_currency_id")
     private Currency targetCurrency;
+
 
     @NonNull
     private BigDecimal rate;
@@ -37,12 +38,12 @@ public class ExchangeRate {
     private LocalDateTime lastUpdateTime;
 
     @Builder
-    public ExchangeRate(Long id, @NonNull Currency baseCurrency, @NonNull Currency targetCurrency,
-                        @NonNull BigDecimal rate, @NonNull LocalDateTime lastUpdateTime) {
+    public ExchangeRate(Long id, @NonNull Currency baseCurrency, @NonNull Currency targetCurrency, @NonNull BigDecimal rate, @NonNull LocalDateTime lastUpdateTime) {
         this.id = id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;
         this.lastUpdateTime = lastUpdateTime;
     }
+
 }

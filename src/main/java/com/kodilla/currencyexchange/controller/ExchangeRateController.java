@@ -3,6 +3,7 @@ package com.kodilla.currencyexchange.controller;
 import com.kodilla.currencyexchange.domain.ExchangeRate;
 import com.kodilla.currencyexchange.domain.ExchangeRateDto;
 import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
+import com.kodilla.currencyexchange.exception.ExchangeRateCalculationFailedException;
 import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
 import com.kodilla.currencyexchange.mapper.ExchangeRateMapper;
 import com.kodilla.currencyexchange.service.ExchangeRateService;
@@ -10,9 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,7 +34,8 @@ public class ExchangeRateController {
     }
 
     @GetMapping("/codes/{baseCode}/{targetCode}")
-    public ResponseEntity<ExchangeRateDto> getExchangeRateByCodes(@PathVariable String baseCode, @PathVariable String targetCode) throws ExchangeRateNotFoundException, CurrencyNotFoundException {
+    public ResponseEntity<ExchangeRateDto> getExchangeRateByCodes(@PathVariable String baseCode, @PathVariable String targetCode) throws ExchangeRateNotFoundException, CurrencyNotFoundException, ExchangeRateCalculationFailedException {
+        exchangeRateService.calculateRates(baseCode, targetCode);
         ExchangeRate exchangeRate = exchangeRateService.getExchangeRateByCurrencyCodes(baseCode, targetCode);
         return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDto(exchangeRate));
     }

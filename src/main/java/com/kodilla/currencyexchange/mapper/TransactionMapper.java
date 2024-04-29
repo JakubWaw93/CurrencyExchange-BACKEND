@@ -2,6 +2,7 @@ package com.kodilla.currencyexchange.mapper;
 
 import com.kodilla.currencyexchange.domain.Transaction;
 import com.kodilla.currencyexchange.domain.TransactionDto;
+import com.kodilla.currencyexchange.domain.TransactionStatus;
 import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
 import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
 import com.kodilla.currencyexchange.exception.UserNotFoundException;
@@ -29,7 +30,7 @@ public class TransactionMapper {
                 .soldCurrency(currencyRepository.findByIdAndActiveTrue(transactionDto.getSoldCurrencyId()).orElseThrow(CurrencyNotFoundException::new))
                 .exchangeRate(exchangeRateRepository.findById(transactionDto.getExchangeRateId()).orElseThrow(ExchangeRateNotFoundException::new))
                 .amount(transactionDto.getAmount())
-                .status(transactionDto.getStatus())
+                .status(TransactionStatus.valueOf(transactionDto.getStatus()))
                 .transactionDate(transactionDto.getTransactionDate())
                 .build();
     }
@@ -42,7 +43,7 @@ public class TransactionMapper {
                 .soldCurrencyId(transaction.getSoldCurrency().getId())
                 .exchangeRateId(transaction.getExchangeRate().getId())
                 .amount(transaction.getAmount())
-                .status(transaction.getStatus())
+                .status(transaction.getStatus().toString())
                 .transactionDate(transaction.getTransactionDate())
                 .build();
     }

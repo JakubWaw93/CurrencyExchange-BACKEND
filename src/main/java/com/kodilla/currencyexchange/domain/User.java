@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Data
 @Entity
 @Table(name = "USERS")
@@ -31,13 +32,15 @@ public class User {
     @Column(unique = true)
     private String emailAddress;
 
-    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 
     @NonNull
     @Column(unique = true)
     private String apiKey;
 
+    @Builder.Default
     private boolean active = true;
 
     @Transient

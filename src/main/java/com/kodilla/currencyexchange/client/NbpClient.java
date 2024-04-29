@@ -27,7 +27,7 @@ public class NbpClient {
     private final ObjectMapper objectMapper;
     private final ExchangeRateMapper exchangeRateMapper;
 
-    @Scheduled(fixedRate = 1200000)
+    @Scheduled(fixedRate = 5000)
     public void updateExchangeRates() {
         List<Currency> currencies = currencyService.getAllStandardCurrencies();
         currencies.forEach(currency -> {

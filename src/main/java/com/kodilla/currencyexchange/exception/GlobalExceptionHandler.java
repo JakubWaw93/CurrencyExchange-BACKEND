@@ -38,5 +38,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>("Failed to generate Api key: " + exception, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @ExceptionHandler(ExchangeRateCalculationFailedException.class)
+    public ResponseEntity<Object> handleFailedExchangeRateCalculationException(ExchangeRateCalculationFailedException exception) {
+        return new ResponseEntity<>("Failed to calculate Exchange Rate: " + exception, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
 
 }

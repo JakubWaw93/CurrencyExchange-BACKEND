@@ -1,6 +1,5 @@
 package com.kodilla.currencyexchange.domain;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,7 @@ import lombok.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Data
 @Entity
 @Table(name = "CURRENCIES")
@@ -29,25 +29,37 @@ public class Currency {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "baseCurrency")
+    @Builder.Default
+    @OneToMany(mappedBy = "baseCurrency", cascade = CascadeType.ALL)
     private List<ExchangeRate> baseExchangeRates = new ArrayList<>();
 
-    @OneToMany(mappedBy = "targetCurrency")
+    @Builder.Default
+    @OneToMany(mappedBy = "targetCurrency", cascade = CascadeType.ALL)
     private List<ExchangeRate> targetExchangeRates = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "boughtCurrency", cascade = CascadeType.ALL)
+    private List<Transaction> boughtInTransactions = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "soldCurrency", cascade = CascadeType.ALL)
+    private List<Transaction> soldInTransactions = new ArrayList<>();
+
+    @Builder.Default
     private boolean active = true;
 
     private boolean crypto;
 
     @Builder
 
-    public Currency(Long id, @NonNull String code, @NonNull String name, List<ExchangeRate> baseExchangeRates,
-                    List<ExchangeRate> targetExchangeRates, boolean active, boolean crypto) {
+    public Currency(Long id, @NonNull String code, @NonNull String name, List<ExchangeRate> baseExchangeRates, List<ExchangeRate> targetExchangeRates, List<Transaction> boughtInTransactions, List<Transaction> soldInTransactions, boolean active, boolean crypto) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.baseExchangeRates = baseExchangeRates;
         this.targetExchangeRates = targetExchangeRates;
+        this.boughtInTransactions = boughtInTransactions;
+        this.soldInTransactions = soldInTransactions;
         this.active = active;
         this.crypto = crypto;
     }

@@ -4,14 +4,18 @@ import com.kodilla.currencyexchange.domain.Transaction;
 import com.kodilla.currencyexchange.domain.User;
 import com.kodilla.currencyexchange.domain.UserDto;
 import com.kodilla.currencyexchange.repository.TransactionRepository;
+
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+
 @Component
 @RequiredArgsConstructor
+@Data
 public class UserMapper {
 
     private final TransactionRepository transactionRepository;

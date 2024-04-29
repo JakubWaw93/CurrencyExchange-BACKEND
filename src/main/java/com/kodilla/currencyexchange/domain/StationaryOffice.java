@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+@Builder
 @Data
 @Entity
 @Table(name = "STATIONARY_OFFICES")
@@ -15,7 +16,7 @@ public class StationaryOffice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long Id;
+    private Long id;
 
     @NonNull
     @Column(unique = true)
@@ -24,12 +25,12 @@ public class StationaryOffice {
     @NonNull
     private String phone;
 
+    @Builder.Default
     private boolean active = true;
 
     @Builder
-
     public StationaryOffice(Long id, @NonNull String address, @NonNull String phone, boolean active) {
-        Id = id;
+        this.id = id;
         this.address = address;
         this.phone = phone;
         this.active = active;

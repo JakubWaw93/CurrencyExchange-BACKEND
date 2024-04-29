@@ -1,10 +1,8 @@
 package com.kodilla.currencyexchange.service;
 
-import com.kodilla.currencyexchange.domain.Currency;
 import com.kodilla.currencyexchange.domain.ExchangeRate;
 import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
 import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
-import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import com.kodilla.currencyexchange.repository.ExchangeRateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import java.util.List;
 public class ExchangeRateService {
 
     private final ExchangeRateRepository exchangeRateRepository;
-    private final CurrencyRepository currencyRepository;
     private final CurrencyService currencyService;
 
     public List<ExchangeRate> getAllExchangeRates() {
@@ -30,7 +27,6 @@ public class ExchangeRateService {
     }
 
     public ExchangeRate getExchangeRateByCurrencyCodes(final String baseCurrencyCode, final String targetCurrencyCode) throws ExchangeRateNotFoundException, CurrencyNotFoundException {
-        calculateRates(baseCurrencyCode, targetCurrencyCode);
         return exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode
                 (baseCurrencyCode, targetCurrencyCode).orElseThrow
                 (ExchangeRateNotFoundException::new);
@@ -44,7 +40,7 @@ public class ExchangeRateService {
         return exchangeRateRepository.save(exchangeRate);
     }
 
-    public ExchangeRate calculateRates(final String baseCurrencyCode, final String targetCurrencyCode) throws CurrencyNotFoundException, ExchangeRateNotFoundException {
+    public void calculateRates(final String baseCurrencyCode, final String targetCurrencyCode) throws CurrencyNotFoundException, ExchangeRateNotFoundException {
         BigDecimal exchangeRateForPLN = getExchangeRateByCurrencyCodes(baseCurrencyCode, "PLN").getRate();
         BigDecimal newRate;
         if (!targetCurrencyCode.equals("PLN")) {
@@ -66,9 +62,8 @@ public class ExchangeRateService {
                     .lastUpdateTime(LocalDateTime.now())
                     .build();
 
-            return saveExchangeRate(exchangeRate);
+            saveExchangeRate(exchangeRate);
         }
-        return null;
         //może jednak zrezygnuję z tych zamian, i dla ułatwienia dla wszystkich ExchangeRate target będzie w PLN
 
     }

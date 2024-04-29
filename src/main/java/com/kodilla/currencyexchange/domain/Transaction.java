@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,19 +20,19 @@ public class Transaction {
     @Column(unique = true)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bought_currency_id")
     private Currency boughtCurrency;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sold_currency_id")
     private Currency soldCurrency;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "exchange_rate_id")
     private ExchangeRate exchangeRate;
 
@@ -41,7 +40,7 @@ public class Transaction {
     private BigDecimal amount;
 
     @NonNull
-    private String status;
+    private TransactionStatus status;
 
     @NonNull
     private LocalDateTime transactionDate;
@@ -49,7 +48,7 @@ public class Transaction {
     @Builder
 
     public Transaction(Long id, User user, Currency boughtCurrency, Currency soldCurrency, ExchangeRate exchangeRate,
-                       @NonNull BigDecimal amount, @NonNull String status, @NonNull LocalDateTime transactionDate) {
+                       @NonNull BigDecimal amount, @NonNull TransactionStatus status, @NonNull LocalDateTime transactionDate) {
         this.id = id;
         this.user = user;
         this.boughtCurrency = boughtCurrency;
