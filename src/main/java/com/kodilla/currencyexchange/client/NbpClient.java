@@ -41,7 +41,7 @@ public class NbpClient {
                 ExchangeRate existingExchangeRate = exchangeRateService.getExchangeRateByCurrencyCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode());
                 if(existingExchangeRate != null) {
                     existingExchangeRate.setRate(exchangeRate.getRate());
-                    existingExchangeRate.setLocalDateTime(exchangeRate.getLocalDateTime());
+                    existingExchangeRate.setLastUpdateTime(exchangeRate.getLastUpdateTime());
                     exchangeRateService.saveExchangeRate(existingExchangeRate);
                 } else {
                     exchangeRateService.saveExchangeRate(exchangeRate);

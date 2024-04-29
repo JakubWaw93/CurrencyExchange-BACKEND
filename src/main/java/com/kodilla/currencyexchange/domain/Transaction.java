@@ -44,7 +44,7 @@ public class Transaction {
     private String status;
 
     @NonNull
-    private LocalDateTime transactionDate = LocalDateTime.now();
+    private LocalDateTime transactionDate;
 
     @Builder
 

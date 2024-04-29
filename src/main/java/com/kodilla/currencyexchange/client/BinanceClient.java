@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class BinanceClient {
                 ExchangeRate existingExchangeRate = exchangeRateService.getExchangeRateByCurrencyCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode());
                 if(existingExchangeRate != null) {
                     existingExchangeRate.setRate(exchangeRate.getRate());
-                    existingExchangeRate.setLocalDateTime(exchangeRate.getLocalDateTime());
+                    existingExchangeRate.setLastUpdateTime(exchangeRate.getLastUpdateTime());
                     exchangeRateService.saveExchangeRate(existingExchangeRate);
                 } else {
                     exchangeRateService.saveExchangeRate(exchangeRate);

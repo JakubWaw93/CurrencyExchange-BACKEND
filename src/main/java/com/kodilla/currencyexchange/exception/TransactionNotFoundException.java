@@ -1,5 +1,5 @@
 package com.kodilla.currencyexchange.exception;
 
-public class TransactionNotFoundException {
+public class TransactionNotFoundException extends RuntimeException{
 
 }

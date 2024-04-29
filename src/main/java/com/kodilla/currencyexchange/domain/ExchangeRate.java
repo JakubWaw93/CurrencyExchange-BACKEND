@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -35,15 +34,15 @@ public class ExchangeRate {
     private BigDecimal rate;
 
     @NonNull
-    private LocalDateTime localDateTime;
+    private LocalDateTime lastUpdateTime;
 
     @Builder
     public ExchangeRate(Long id, @NonNull Currency baseCurrency, @NonNull Currency targetCurrency,
-                        @NonNull BigDecimal rate, @NonNull LocalDateTime localDateTime) {
+                        @NonNull BigDecimal rate, @NonNull LocalDateTime lastUpdateTime) {
         this.id = id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;
-        this.localDateTime = localDateTime;
+        this.lastUpdateTime = lastUpdateTime;
     }
 }

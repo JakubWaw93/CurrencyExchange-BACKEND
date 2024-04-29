@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ExchangeRateController {
     public ResponseEntity<ExchangeRateDto> getExchangeRateById(@PathVariable Long ExchangeRateId) {
         ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
                 .id(ExchangeRateId)
-                .localDateTime(LocalDate.now())
+                .lastUpdateTime(LocalDateTime.now())
                 .baseCurrencyId(1L)
                 .targetCurrencyId(2L)
                 .rate(new BigDecimal("500.256"))
@@ -37,7 +38,7 @@ public class ExchangeRateController {
     public ResponseEntity<ExchangeRateDto> getExchangeRateByIds(@PathVariable Long baseId, @PathVariable Long targetId) {
         ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
                 .id(1L)
-                .localDateTime(LocalDate.now())
+                .lastUpdateTime(LocalDateTime.now())
                 .baseCurrencyId(baseId)
                 .targetCurrencyId(targetId)
                 .rate(new BigDecimal("500.256"))
@@ -67,7 +68,7 @@ public class ExchangeRateController {
     public ResponseEntity<ExchangeRateDto> createExchangeRate() {
         ExchangeRateDto exchangeRateDto = ExchangeRateDto.builder()
                 .id(1L)
-                .localDateTime(LocalDate.now())
+                .lastUpdateTime(LocalDateTime.now())
                 .baseCurrencyId(1L)
                 .targetCurrencyId(2L)
                 .rate(new BigDecimal("500.256"))

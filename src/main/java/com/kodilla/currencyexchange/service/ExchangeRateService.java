@@ -43,7 +43,7 @@ public class ExchangeRateService {
         return exchangeRateRepository.save(exchangeRate);
     }
 
-    /*public ExchangeRate calculateRates(final String baseCurrencyCode, final String targetCurrencyCode) {
+    public ExchangeRate calculateRates(final String baseCurrencyCode, final String targetCurrencyCode) {
         BigDecimal exchangeRateForPLN = getExchangeRateByCurrencyCodes(baseCurrencyCode, "PLN").getRate();
         BigDecimal newRate=null;
 
@@ -64,13 +64,13 @@ public class ExchangeRateService {
                 .baseCurrency(currencyService.getCurrencyByCode(baseCurrencyCode))
                 .targetCurrency(currencyService.getCurrencyByCode(targetCurrencyCode))
                 .rate(newRate)
-                .localDateTime(LocalDateTime.now())
+                .lastUpdateTime(LocalDateTime.now())
                 .build();
 
         return saveExchangeRate(exchangeRate);
         //może jednak zrezygnuję z tych zamian, i dla ułatwienia dla wszystkich ExchangeRate target będzie w PLN
 
-    }*/
+    }
 
 
 
