@@ -29,7 +29,7 @@ public class TransactionMapper {
                 .boughtCurrency(currencyRepository.findByIdAndActiveTrue(transactionDto.getBoughtCurrencyId()).orElseThrow(CurrencyNotFoundException::new))
                 .soldCurrency(currencyRepository.findByIdAndActiveTrue(transactionDto.getSoldCurrencyId()).orElseThrow(CurrencyNotFoundException::new))
                 .exchangeRate(exchangeRateRepository.findById(transactionDto.getExchangeRateId()).orElseThrow(ExchangeRateNotFoundException::new))
-                .amount(transactionDto.getAmount())
+                .amountBoughtCurrency(transactionDto.getAmountBoughtCurrency())
                 .status(TransactionStatus.valueOf(transactionDto.getStatus()))
                 .transactionDate(transactionDto.getTransactionDate())
                 .build();
@@ -42,7 +42,7 @@ public class TransactionMapper {
                 .boughtCurrencyId(transaction.getBoughtCurrency().getId())
                 .soldCurrencyId(transaction.getSoldCurrency().getId())
                 .exchangeRateId(transaction.getExchangeRate().getId())
-                .amount(transaction.getAmount())
+                .amountBoughtCurrency(transaction.getAmountBoughtCurrency())
                 .status(transaction.getStatus().toString())
                 .transactionDate(transaction.getTransactionDate())
                 .build();

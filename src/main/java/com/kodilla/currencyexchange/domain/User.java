@@ -36,7 +36,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 
-    @NonNull
     @Column(unique = true)
     private String apiKey;
 
@@ -47,7 +46,8 @@ public class User {
     private LocalDateTime apiKeyExpiration;
 
     @Builder
-    public User(Long id, @NonNull String firstname, @NonNull String lastname, @NonNull String emailAddress, List<Transaction> transactions, @NonNull String apiKey, boolean active, LocalDateTime apiKeyExpiration) {
+    public User(Long id, @NonNull String firstname, @NonNull String lastname, @NonNull String emailAddress,
+                List<Transaction> transactions, String apiKey, boolean active, LocalDateTime apiKeyExpiration) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;

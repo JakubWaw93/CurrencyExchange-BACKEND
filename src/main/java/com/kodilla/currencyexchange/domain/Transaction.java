@@ -32,12 +32,12 @@ public class Transaction {
     @JoinColumn(name = "sold_currency_id")
     private Currency soldCurrency;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "exchange_rate_id")
     private ExchangeRate exchangeRate;
 
     @NonNull
-    private BigDecimal amount;
+    private BigDecimal amountBoughtCurrency;
 
     @NonNull
     private TransactionStatus status;
@@ -48,13 +48,13 @@ public class Transaction {
     @Builder
 
     public Transaction(Long id, User user, Currency boughtCurrency, Currency soldCurrency, ExchangeRate exchangeRate,
-                       @NonNull BigDecimal amount, @NonNull TransactionStatus status, @NonNull LocalDateTime transactionDate) {
+                       @NonNull BigDecimal amountBoughtCurrency, @NonNull TransactionStatus status, @NonNull LocalDateTime transactionDate) {
         this.id = id;
         this.user = user;
         this.boughtCurrency = boughtCurrency;
         this.soldCurrency = soldCurrency;
         this.exchangeRate = exchangeRate;
-        this.amount = amount;
+        this.amountBoughtCurrency = amountBoughtCurrency;
         this.status = status;
         this.transactionDate = transactionDate;
     }

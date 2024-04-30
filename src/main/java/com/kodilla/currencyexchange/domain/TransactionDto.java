@@ -15,7 +15,7 @@ public class TransactionDto {
     private Long boughtCurrencyId;
     private Long soldCurrencyId;
     private Long exchangeRateId;
-    private BigDecimal amount;
+    private BigDecimal amountBoughtCurrency;
     private String status;
     private LocalDateTime transactionDate;
 

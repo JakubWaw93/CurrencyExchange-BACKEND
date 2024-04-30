@@ -3,16 +3,15 @@ package com.kodilla.currencyexchange.mapper;
 import com.kodilla.currencyexchange.domain.StationaryOffice;
 import com.kodilla.currencyexchange.domain.StationaryOfficeDto;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class StationaryOfficeMapperTestSuite {
 
     @InjectMocks

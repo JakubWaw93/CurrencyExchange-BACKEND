@@ -8,7 +8,10 @@ import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Builder
 @Data
 @Entity
 @Table(name = "EXCHANGE_RATES")
@@ -30,6 +33,9 @@ public class ExchangeRate {
     @JoinColumn(name = "target_currency_id")
     private Currency targetCurrency;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "exchangeRate")
+    private List<Transaction> transactions = new ArrayList<>();
 
     @NonNull
     private BigDecimal rate;
@@ -38,12 +44,15 @@ public class ExchangeRate {
     private LocalDateTime lastUpdateTime;
 
     @Builder
-    public ExchangeRate(Long id, @NonNull Currency baseCurrency, @NonNull Currency targetCurrency, @NonNull BigDecimal rate, @NonNull LocalDateTime lastUpdateTime) {
+
+    public ExchangeRate(Long id, @NonNull Currency baseCurrency, @NonNull Currency targetCurrency,
+                        List<Transaction> transactions, @NonNull BigDecimal rate, @NonNull LocalDateTime lastUpdateTime) {
         this.id = id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
+        this.transactions = transactions;
         this.rate = rate;
         this.lastUpdateTime = lastUpdateTime;
     }
-
 }
+

@@ -28,7 +28,7 @@ public class BinanceClient {
     private final ExchangeRateMapper exchangeRateMapper;
 
     private URI getUriBinance(final String baseCurrencyCode) {
-        return UriComponentsBuilder.fromHttpUrl("https://api.binance.com/api/v3/avgPrice?symbol=" + baseCurrencyCode +"BTCUSDT")
+        return UriComponentsBuilder.fromHttpUrl("https://api.binance.com/api/v3/avgPrice?symbol=" + baseCurrencyCode +"USDT")
                 .build()
                 .encode()
                 .toUri();

@@ -8,6 +8,7 @@ import com.kodilla.currencyexchange.repository.TransactionRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +16,9 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-@Data
 public class UserMapper {
 
-    private final TransactionRepository transactionRepository;
+    public final TransactionRepository transactionRepository;
 
     public User mapToUser(final UserDto userDto) {
         List<Transaction> transactions = userDto.getTransactionsIds().stream()

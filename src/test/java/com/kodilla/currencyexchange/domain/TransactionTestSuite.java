@@ -34,7 +34,7 @@ public class TransactionTestSuite {
     private UserRepository userRepository;
 
     private Transaction transaction;
-    private LocalDateTime transactionDate = LocalDateTime.of(LocalDate.of(2024,4,28), LocalTime.of(15,0));
+    private final LocalDateTime transactionDate = LocalDateTime.of(LocalDate.of(2024,4,28), LocalTime.of(15,0));
 
     @BeforeEach
     void createTransaction() {
@@ -58,6 +58,8 @@ public class TransactionTestSuite {
                 .lastUpdateTime(LocalDateTime.of(LocalDate.of(2024,4,28), LocalTime.of(15,0)))
                 .build();
 
+        exchangeRateRepository.save(exchangeRate);
+
         User user = User.builder()
                 .firstname("Jan")
                 .lastname("Kowalski")
@@ -65,30 +67,25 @@ public class TransactionTestSuite {
                 .apiKey("24987463541165498436516854")
                 .build();
 
+        userRepository.save(user);
+
         transaction = Transaction.builder()
                 .transactionDate(transactionDate)
                 .exchangeRate(exchangeRate)
                 .boughtCurrency(currency1)
                 .soldCurrency(currency2)
-                .amount(new BigDecimal(10))
+                .amountBoughtCurrency(new BigDecimal(10))
                 .user(user)
                 .status(TransactionStatus.IN_PROGRESS)
                 .build();
 
     }
 
-    @BeforeEach
-    public void cleanUpBefore() {
-        exchangeRateRepository.deleteAll();
-        currencyRepository.deleteAll();
-        transactionRepository.deleteAll();
-        userRepository.deleteAll();
-    }
     @AfterEach
     public void cleanUp() {
+        transactionRepository.deleteAll();
         exchangeRateRepository.deleteAll();
         currencyRepository.deleteAll();
-        transactionRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -122,7 +119,7 @@ public class TransactionTestSuite {
         List<Transaction> transactions = transactionRepository.findAllByUserId(transaction.getUser().getId());
         //Then
         assertEquals(1, transactions.size());
-        assertEquals(new BigDecimal(10), transactions.get(0).getAmount());
+        assertEquals(new BigDecimal(10), transactions.get(0).getAmountBoughtCurrency());
     }
 
     @Test
