@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class ExchangeRateDto {
 
@@ -21,4 +20,16 @@ public class ExchangeRateDto {
     private List<Long> transactionsIds = new ArrayList<>();
     private BigDecimal rate;
     private LocalDateTime lastUpdateTime;
+
+    @Builder
+
+    public ExchangeRateDto(Long id, Long baseCurrencyId, Long targetCurrencyId, List<Long> transactionsIds,
+                           BigDecimal rate, LocalDateTime lastUpdateTime) {
+        this.id = id;
+        this.baseCurrencyId = baseCurrencyId;
+        this.targetCurrencyId = targetCurrencyId;
+        this.transactionsIds = new ArrayList<>();
+        this.rate = rate;
+        this.lastUpdateTime = lastUpdateTime;
+    }
 }

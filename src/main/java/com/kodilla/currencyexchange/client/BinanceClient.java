@@ -1,50 +1,55 @@
 package com.kodilla.currencyexchange.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kodilla.currencyexchange.configuration.WebClientConfig;
 import com.kodilla.currencyexchange.domain.Currency;
 import com.kodilla.currencyexchange.domain.ExchangeRate;
 import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
 import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
 import com.kodilla.currencyexchange.mapper.ExchangeRateMapper;
+import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import com.kodilla.currencyexchange.service.CurrencyService;
 import com.kodilla.currencyexchange.service.ExchangeRateService;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
+@Service
+@Data
 public class BinanceClient {
 
     private final CurrencyService currencyService;
     private final ExchangeRateService exchangeRateService;
-    private final WebClient webClient = WebClient.create();
+    private final WebClientConfig webClientConfig;
     private final ObjectMapper objectMapper;
     private final ExchangeRateMapper exchangeRateMapper;
+    private final CurrencyRepository currencyRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinanceClient.class);
 
-    private URI getUriBinance(final String baseCurrencyCode) {
-        return UriComponentsBuilder.fromHttpUrl("https://api.binance.com/api/v3/avgPrice?symbol=" + baseCurrencyCode +"USDT")
-                .build()
-                .encode()
-                .toUri();
-    }
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(cron = "0/15 0 * * ?")
     public void updateExchangeRates() {
         List<Currency> currencies = currencyService.getAllCryptoCurrencies();
         currencies.forEach(currency -> {
             ExchangeRate exchangeRate = getExchangeRateFromBinanceApi(currency.getCode());
             if (exchangeRate != null) {
-                ExchangeRate existingExchangeRate = null;
+                ExchangeRate existingExchangeRate;
                 try {
                     existingExchangeRate = exchangeRateService.getExchangeRateByCurrencyCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode());
                 } catch (ExchangeRateNotFoundException | CurrencyNotFoundException e) {
-                    throw new RuntimeException(e);
+                    existingExchangeRate=null;
                 }
                 if(existingExchangeRate != null) {
                     existingExchangeRate.setRate(exchangeRate.getRate());
@@ -57,20 +62,42 @@ public class BinanceClient {
         });
     }
 
-    public ExchangeRate getExchangeRateFromBinanceApi(final String targetCurrencyCode) {
-        URI url = getUriBinance(targetCurrencyCode);
+    public ExchangeRate getExchangeRateFromBinanceApi(final String baseCurrencyCode) {
+        URI url = getUriBinance(baseCurrencyCode);
 
-        String responseBody = webClient.get()
+        checkIfCurrencyExistAndCreate(baseCurrencyCode);
+
+        String responseBody = webClientConfig.webClientBuilder().build().get()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-
         try {
             BinanceExchangeRateResponse response = objectMapper.readValue(responseBody, BinanceExchangeRateResponse.class);
-            return exchangeRateMapper.mapBinanceResponseToExchangeRate(response, targetCurrencyCode);
-        } catch (Exception e) {
+            return exchangeRateMapper.mapBinanceResponseToExchangeRate(response, baseCurrencyCode);
+        } catch (JsonProcessingException | CurrencyNotFoundException | ExchangeRateNotFoundException e) {
+            LOGGER.error("Retrieving response with exchange rate failed.");
             return null;
         }
+
+
+    }
+
+    private void checkIfCurrencyExistAndCreate(String baseCurrencyCode) {
+        if (!currencyRepository.existsByCode(baseCurrencyCode)) {
+            Currency currency = Currency.builder()
+                    .code(baseCurrencyCode)
+                    .name(baseCurrencyCode + " name update needed.")
+                    .crypto(true)
+                    .build();
+            currencyRepository.save(currency);
+        }
+    }
+
+    private URI getUriBinance(final String baseCurrencyCode) {
+        return UriComponentsBuilder.fromHttpUrl("https://api.binance.com/api/v3/avgPrice?symbol=" + baseCurrencyCode + "USDT")
+                .build()
+                .encode()
+                .toUri();
     }
 }

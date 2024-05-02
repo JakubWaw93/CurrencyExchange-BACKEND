@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+@Audited
 @Table(name = "EXCHANGE_RATES")
 @NoArgsConstructor
 public class ExchangeRate {

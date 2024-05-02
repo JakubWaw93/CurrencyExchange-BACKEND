@@ -35,7 +35,6 @@ public class ExchangeRateController {
 
     @GetMapping("/codes/{baseCode}/{targetCode}")
     public ResponseEntity<ExchangeRateDto> getExchangeRateByCodes(@PathVariable String baseCode, @PathVariable String targetCode) throws ExchangeRateNotFoundException, CurrencyNotFoundException, ExchangeRateCalculationFailedException {
-        exchangeRateService.calculateRates(baseCode, targetCode);
         ExchangeRate exchangeRate = exchangeRateService.getExchangeRateByCurrencyCodes(baseCode, targetCode);
         return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDto(exchangeRate));
     }

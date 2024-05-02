@@ -59,6 +59,8 @@ public class CurrencyTestSuite {
         assertTrue(retrievedCurrency.get().isActive());
         assertFalse(retrievedCurrency.get().isCrypto());
         assertEquals("PLN", retrievedCurrency.get().getCode());
+        assertTrue(currencyRepository.existsByCode("PLN"));
+        assertFalse(currencyRepository.existsByCode("ETH"));
     }
 
     @Test

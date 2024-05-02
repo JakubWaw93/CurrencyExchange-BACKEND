@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.envers.Audited;
 
 @Builder
 @Data
 @Entity
+@Audited
 @Table(name = "STATIONARY_OFFICES")
 @NoArgsConstructor
 public class StationaryOffice {

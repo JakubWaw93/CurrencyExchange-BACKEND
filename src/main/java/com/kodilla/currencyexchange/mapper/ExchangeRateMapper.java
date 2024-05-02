@@ -10,8 +10,6 @@ import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
 import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import com.kodilla.currencyexchange.repository.ExchangeRateRepository;
 import com.kodilla.currencyexchange.repository.TransactionRepository;
-import com.kodilla.currencyexchange.service.CurrencyService;
-import com.kodilla.currencyexchange.service.ExchangeRateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +40,9 @@ public class ExchangeRateMapper {
         return ExchangeRate.builder()
                 .baseCurrency(currencyRepository.findByCodeAndActiveTrue(baseCurrencyCode).orElseThrow(CurrencyNotFoundException::new))
                 .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
-                .rate(new BigDecimal(response.getPrice()).multiply(exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode("USD", "PLN").orElseThrow(ExchangeRateNotFoundException::new).getRate()))
+                .rate(new BigDecimal(response.getPrice())
+                        .multiply(exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode("USD", "PLN")
+                                .orElseThrow(ExchangeRateNotFoundException::new).getRate()))
                 .lastUpdateTime(LocalDateTime.now())
                 .build();
     }

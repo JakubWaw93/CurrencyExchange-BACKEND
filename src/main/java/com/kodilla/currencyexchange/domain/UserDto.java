@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class UserDto {
 
@@ -21,4 +20,16 @@ public class UserDto {
     private String apiKey;
     @Builder.Default
     private boolean active = true;
+
+    @Builder
+    public UserDto(Long id, String firstname, String lastname, String emailAddress,
+                   List<Long> transactionsIds, String apiKey, boolean active) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.emailAddress = emailAddress;
+        this.transactionsIds = new ArrayList<>();
+        this.apiKey = apiKey;
+        this.active = true;
+    }
 }

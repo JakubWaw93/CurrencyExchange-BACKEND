@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class StationaryOfficeDto {
 
@@ -14,4 +13,12 @@ public class StationaryOfficeDto {
     private String phone;
     @Builder.Default
     private boolean active = true;
+
+    @Builder
+    public StationaryOfficeDto(Long id, String address, String phone, boolean active) {
+        this.id = id;
+        this.address = address;
+        this.phone = phone;
+        this.active = true;
+    }
 }

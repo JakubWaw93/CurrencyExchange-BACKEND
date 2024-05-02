@@ -1,13 +1,18 @@
 package com.kodilla.currencyexchange.service;
 
+import com.kodilla.currencyexchange.domain.Currency;
 import com.kodilla.currencyexchange.domain.ExchangeRate;
 import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
 import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
+import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import com.kodilla.currencyexchange.repository.ExchangeRateRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +21,7 @@ import java.util.List;
 public class ExchangeRateService {
 
     private final ExchangeRateRepository exchangeRateRepository;
-    private final CurrencyService currencyService;
+    private final CurrencyRepository currencyRepository;
 
     public List<ExchangeRate> getAllExchangeRates() {
         return exchangeRateRepository.findAll();
@@ -40,32 +45,52 @@ public class ExchangeRateService {
         return exchangeRateRepository.save(exchangeRate);
     }
 
-    public void calculateRates(final String baseCurrencyCode, final String targetCurrencyCode) throws CurrencyNotFoundException, ExchangeRateNotFoundException {
-        BigDecimal exchangeRateForPLN = getExchangeRateByCurrencyCodes(baseCurrencyCode, "PLN").getRate();
-        BigDecimal newRate;
-        if (!targetCurrencyCode.equals("PLN")) {
-            if (currencyService.getCurrencyByCode(targetCurrencyCode).isCrypto()) {
+    @Scheduled(cron = "0/15 0 * * ?")
+    public void calculateAndSaveMissingExchangeRates() {
+        List<ExchangeRate> plnExchangeRates = exchangeRateRepository.findAllByTargetCurrencyCode("PLN");
 
-                BigDecimal exchangeRateForPLNToUSD = new BigDecimal(1L).divide(getExchangeRateByCurrencyCodes("USD", "PLN").getRate());
-                newRate = exchangeRateForPLN.divide(exchangeRateForPLNToUSD);
+        for (ExchangeRate plnExchangeRate : plnExchangeRates) {
+            Currency baseCurrency = plnExchangeRate.getBaseCurrency();
 
-                BigDecimal exchangeRateFromUsdToCrypto = new BigDecimal(1L).divide(getExchangeRateByCurrencyCodes("USD", targetCurrencyCode).getRate());
-                newRate = newRate.multiply(exchangeRateFromUsdToCrypto);
-            } else {
-                BigDecimal exchangeRateForTargetCurrency = getExchangeRateByCurrencyCodes(targetCurrencyCode, "PLN").getRate();
-                newRate = exchangeRateForPLN.divide(exchangeRateForTargetCurrency);
+            List<Currency> targetCurrencies = currencyRepository.findAllByCodeNot("PLN");
+            for (Currency targetCurrency : targetCurrencies) {
+                ExchangeRate existingExchangeRate = exchangeRateRepository
+                        .findByBaseCurrencyCodeAndTargetCurrencyCode(baseCurrency.getCode(), targetCurrency.getCode())
+                        .orElse(null);
+
+                if (existingExchangeRate != null) {
+                    BigDecimal newRate = calculateNewExchangeRate(plnExchangeRate, targetCurrency);
+                    existingExchangeRate.setRate(newRate);
+
+                    exchangeRateRepository.save(existingExchangeRate);
+                } else {
+                    BigDecimal newRate = calculateNewExchangeRate(plnExchangeRate, targetCurrency);
+                    ExchangeRate newExchangeRate = ExchangeRate.builder()
+                            .rate(newRate)
+                            .lastUpdateTime(LocalDateTime.now())
+                            .baseCurrency(baseCurrency)
+                            .targetCurrency(targetCurrency)
+                            .build();
+
+                    exchangeRateRepository.save(newExchangeRate);
+                }
             }
-            ExchangeRate exchangeRate = ExchangeRate.builder()
-                    .baseCurrency(currencyService.getCurrencyByCode(baseCurrencyCode))
-                    .targetCurrency(currencyService.getCurrencyByCode(targetCurrencyCode))
-                    .rate(newRate)
-                    .lastUpdateTime(LocalDateTime.now())
-                    .build();
-
-            saveExchangeRate(exchangeRate);
         }
-        //może jednak zrezygnuję z tych zamian, i dla ułatwienia dla wszystkich ExchangeRate target będzie w PLN
+    }
 
+
+    private BigDecimal calculateNewExchangeRate(ExchangeRate plnExchangeRate, Currency targetCurrency) {
+        BigDecimal plnRate = plnExchangeRate.getRate();
+
+        BigDecimal inversePlnRate = BigDecimal.ONE.divide(plnRate, 10, RoundingMode.HALF_UP);
+
+        ExchangeRate targetToPlnExchangeRate = exchangeRateRepository
+                .findByBaseCurrencyCodeAndTargetCurrencyCode(targetCurrency.getCode(), "PLN")
+                .orElseThrow(() -> new IllegalStateException("Exchange rate not found for " + targetCurrency.getCode() + " to PLN"));
+
+        BigDecimal result = targetToPlnExchangeRate.getRate().multiply(inversePlnRate).setScale(10, RoundingMode.HALF_UP);
+
+        return BigDecimal.ONE.divide(result, 10, RoundingMode.HALF_UP).setScale(10, RoundingMode.HALF_UP);
     }
 
 

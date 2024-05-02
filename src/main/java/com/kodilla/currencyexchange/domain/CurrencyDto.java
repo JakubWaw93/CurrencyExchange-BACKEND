@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class CurrencyDto {
 
@@ -26,4 +25,17 @@ public class CurrencyDto {
     @Builder.Default
     private boolean active = true;
     private boolean crypto;
+
+    @Builder
+    public CurrencyDto(Long id, String code, String name, List<Long> baseExchangeRatesIds, List<Long> targetExchangeRatesIds, List<Long> boughtInTransactionsIds, List<Long> soldInTransactionsIds, boolean active, boolean crypto) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.baseExchangeRatesIds = new ArrayList<>();;
+        this.targetExchangeRatesIds = new ArrayList<>();;
+        this.boughtInTransactionsIds = new ArrayList<>();;
+        this.soldInTransactionsIds = new ArrayList<>();;
+        this.active = true;
+        this.crypto = crypto;
+    }
 }

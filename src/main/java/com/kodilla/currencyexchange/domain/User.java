@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+@Audited
 @Table(name = "USERS")
 @NoArgsConstructor
 public class User {
@@ -36,12 +39,14 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 
+    @NotAudited
     @Column(unique = true)
     private String apiKey;
 
     @Builder.Default
     private boolean active = true;
 
+    @NotAudited
     @Transient
     private LocalDateTime apiKeyExpiration;
 

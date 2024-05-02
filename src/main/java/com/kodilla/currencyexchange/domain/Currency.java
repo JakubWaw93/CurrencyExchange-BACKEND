@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.envers.Audited;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+@Audited
 @Table(name = "CURRENCIES")
 @NoArgsConstructor
 public class Currency {

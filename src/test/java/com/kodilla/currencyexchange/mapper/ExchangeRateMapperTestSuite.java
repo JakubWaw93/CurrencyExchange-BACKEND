@@ -44,7 +44,7 @@ public class ExchangeRateMapperTestSuite {
     private ExchangeRate exchangeRateUsdToPln;
 
     @BeforeEach
-    void addCurrencies() {
+    void setEnvironment() {
         currencyPln = Currency.builder()
                 .code("PLN")
                 .name("Zloty Polski")

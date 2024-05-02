@@ -5,12 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Audited
 @Table(name = "TRANSACTIONS")
 @NoArgsConstructor
 public class Transaction {

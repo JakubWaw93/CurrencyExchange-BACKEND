@@ -21,7 +21,10 @@ public interface CurrencyRepository extends JpaRepository<Currency, Long> {
     List<Currency> findAllByCryptoTrueAndActiveTrue();
 
     List<Currency> findAllByCryptoFalseAndActiveTrue();
+    List<Currency> findAllByCodeNot(String code);
 
     Optional<Currency> findByIdAndActiveTrue(Long id);
+
+    Boolean existsByCode(String code);
 
 }
