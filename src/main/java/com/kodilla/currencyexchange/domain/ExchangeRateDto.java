@@ -21,8 +21,6 @@ public class ExchangeRateDto {
     private BigDecimal rate;
     private LocalDateTime lastUpdateTime;
 
-    @Builder
-
     public ExchangeRateDto(Long id, Long baseCurrencyId, Long targetCurrencyId, List<Long> transactionsIds,
                            BigDecimal rate, LocalDateTime lastUpdateTime) {
         this.id = id;

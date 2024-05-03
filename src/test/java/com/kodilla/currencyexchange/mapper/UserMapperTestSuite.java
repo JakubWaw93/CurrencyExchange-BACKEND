@@ -29,6 +29,8 @@ public class UserMapperTestSuite {
                 .emailAddress("something@gmail.com")
                 .firstname("Jan")
                 .lastname("Kowalski")
+                .login("JanKow")
+                .password("1111")
                 .build();
         //When
         User user = userMapper.mapToUser(userDto);
@@ -49,6 +51,8 @@ public class UserMapperTestSuite {
                 .emailAddress("something@gmail.com")
                 .firstname("Jan")
                 .lastname("Kowalski")
+                .login("JanKow")
+                .password("1111")
                 .build();
         //When
         UserDto userDto = userMapper.mapToUserDto(user);
@@ -69,6 +73,8 @@ public class UserMapperTestSuite {
                 .emailAddress("something@gmail.com")
                 .firstname("Jan")
                 .lastname("Kowalski")
+                .login("JanKow")
+                .password("1111")
                 .build();
 
         User user2 = User.builder()
@@ -77,6 +83,8 @@ public class UserMapperTestSuite {
                 .emailAddress("something@gmail.com")
                 .firstname("Andrzej")
                 .lastname("Kowalski")
+                .login("AndKow")
+                .password("1111")
                 .build();
 
         List<User> users = new ArrayList<>();

@@ -64,6 +64,8 @@ public class TransactionMapperTestSuite {
                 .emailAddress("something@gmail.com")
                 .firstname("Jan")
                 .lastname("Kowalski")
+                .login("JanKow")
+                .password("1111")
                 .build();
         userRepository.save(user);
     }

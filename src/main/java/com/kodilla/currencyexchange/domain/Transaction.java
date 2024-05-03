@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Audited
+@Builder
 @Table(name = "TRANSACTIONS")
 @NoArgsConstructor
 public class Transaction {
@@ -47,7 +48,6 @@ public class Transaction {
     @NonNull
     private LocalDateTime transactionDate;
 
-    @Builder
 
     public Transaction(Long id, User user, Currency boughtCurrency, Currency soldCurrency, ExchangeRate exchangeRate,
                        @NonNull BigDecimal amountBoughtCurrency, @NonNull TransactionStatus status, @NonNull LocalDateTime transactionDate) {

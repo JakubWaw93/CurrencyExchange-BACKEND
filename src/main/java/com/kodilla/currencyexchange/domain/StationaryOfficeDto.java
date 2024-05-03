@@ -14,7 +14,6 @@ public class StationaryOfficeDto {
     @Builder.Default
     private boolean active = true;
 
-    @Builder
     public StationaryOfficeDto(Long id, String address, String phone, boolean active) {
         this.id = id;
         this.address = address;

@@ -14,6 +14,8 @@ public class UserDto {
     private Long id;
     private String firstname;
     private String lastname;
+    private String login;
+    private String password;
     private String emailAddress;
     @Builder.Default
     private List<Long> transactionsIds = new ArrayList<>();
@@ -21,12 +23,13 @@ public class UserDto {
     @Builder.Default
     private boolean active = true;
 
-    @Builder
-    public UserDto(Long id, String firstname, String lastname, String emailAddress,
+    public UserDto(Long id, String firstname, String lastname, String login, String password, String emailAddress,
                    List<Long> transactionsIds, String apiKey, boolean active) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.login = login;
+        this.password = password;
         this.emailAddress = emailAddress;
         this.transactionsIds = new ArrayList<>();
         this.apiKey = apiKey;

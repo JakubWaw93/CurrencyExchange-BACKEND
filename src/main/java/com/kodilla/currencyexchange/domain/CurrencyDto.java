@@ -26,7 +26,6 @@ public class CurrencyDto {
     private boolean active = true;
     private boolean crypto;
 
-    @Builder
     public CurrencyDto(Long id, String code, String name, List<Long> baseExchangeRatesIds, List<Long> targetExchangeRatesIds, List<Long> boughtInTransactionsIds, List<Long> soldInTransactionsIds, boolean active, boolean crypto) {
         this.id = id;
         this.code = code;

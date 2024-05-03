@@ -32,6 +32,13 @@ public class User {
     private String lastname;
 
     @NonNull
+    private String login;
+
+    @NonNull
+    @NotAudited
+    private String password;
+
+    @NonNull
     @Column(unique = true)
     private String emailAddress;
 
@@ -50,16 +57,19 @@ public class User {
     @Transient
     private LocalDateTime apiKeyExpiration;
 
-    @Builder
-    public User(Long id, @NonNull String firstname, @NonNull String lastname, @NonNull String emailAddress,
-                List<Transaction> transactions, String apiKey, boolean active, LocalDateTime apiKeyExpiration) {
+
+    public User(Long id, @NonNull String firstname, @NonNull String lastname, @NonNull String login,
+                @NonNull String password, @NonNull String emailAddress, List<Transaction> transactions,
+                String apiKey, boolean active, LocalDateTime apiKeyExpiration) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.login = login;
+        this.password = password;
         this.emailAddress = emailAddress;
-        this.transactions = transactions;
+        this.transactions = new ArrayList<>();
         this.apiKey = apiKey;
-        this.active = active;
+        this.active = true;
         this.apiKeyExpiration = apiKeyExpiration;
     }
 }

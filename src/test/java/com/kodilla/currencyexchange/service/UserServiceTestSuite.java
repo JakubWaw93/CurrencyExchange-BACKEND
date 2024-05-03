@@ -33,12 +33,16 @@ public class UserServiceTestSuite {
                 .lastname("Kowalski")
                 .emailAddress("jan@kowalski.com")
                 .apiKey("1234567890")
+                .login("JanKow")
+                .password("1111")
                 .apiKeyExpiration(LocalDateTime.now().plusHours(1))
                 .build();
 
         User userWithExpiredApiKey = User.builder()
                 .firstname("Andrzej")
                 .lastname("Nowak")
+                .login("AndNow")
+                .password("2222")
                 .emailAddress("Andrzej@Nowak.com")
                 .apiKey("2384675287635")
                 .apiKeyExpiration(LocalDateTime.now().minusMinutes(30))
@@ -47,6 +51,8 @@ public class UserServiceTestSuite {
         User userWithoutApiKey = User.builder()
                 .firstname("Piotr")
                 .lastname("Paweł")
+                .login("PioPał")
+                .password("1234")
                 .emailAddress("piotr@paweł.com")
                 .build();
 

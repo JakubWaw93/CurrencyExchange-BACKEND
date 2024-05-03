@@ -45,8 +45,6 @@ public class ExchangeRate {
     @NonNull
     private LocalDateTime lastUpdateTime;
 
-    @Builder
-
     public ExchangeRate(Long id, @NonNull Currency baseCurrency, @NonNull Currency targetCurrency,
                         List<Transaction> transactions, @NonNull BigDecimal rate, @NonNull LocalDateTime lastUpdateTime) {
         this.id = id;

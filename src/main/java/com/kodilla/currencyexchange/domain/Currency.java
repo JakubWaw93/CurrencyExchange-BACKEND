@@ -52,8 +52,6 @@ public class Currency {
 
     private boolean crypto;
 
-    @Builder
-
     public Currency(Long id, @NonNull String code, @NonNull String name, List<ExchangeRate> baseExchangeRates, List<ExchangeRate> targetExchangeRates, List<Transaction> boughtInTransactions, List<Transaction> soldInTransactions, boolean active, boolean crypto) {
         this.id = id;
         this.code = code;

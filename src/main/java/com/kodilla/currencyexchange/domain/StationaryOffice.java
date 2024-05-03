@@ -30,11 +30,10 @@ public class StationaryOffice {
     @Builder.Default
     private boolean active = true;
 
-    @Builder
     public StationaryOffice(Long id, @NonNull String address, @NonNull String phone, boolean active) {
         this.id = id;
         this.address = address;
         this.phone = phone;
-        this.active = active;
+        this.active = true;
     }
 }

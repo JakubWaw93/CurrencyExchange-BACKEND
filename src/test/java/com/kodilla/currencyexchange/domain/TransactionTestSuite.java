@@ -63,6 +63,8 @@ public class TransactionTestSuite {
         User user = User.builder()
                 .firstname("Jan")
                 .lastname("Kowalski")
+                .login("JanKow")
+                .password("1111")
                 .emailAddress("JanKowalski@gmail.com")
                 .apiKey("24987463541165498436516854")
                 .build();
