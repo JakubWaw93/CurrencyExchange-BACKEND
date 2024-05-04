@@ -88,7 +88,7 @@ public class ExchangeRateMapperTestSuite {
         ExchangeRate exchangeRate = exchangeRateMapper.mapNbpResponseToExchangeRate(nbpExchangeRateResponse);
         //Then
         assertEquals("USD", exchangeRate.getBaseCurrency().getCode());
-        assertEquals(new BigDecimal("4.0341"), exchangeRate.getRate());
+        assertEquals(new BigDecimal("4.0341"), exchangeRate.getRate().setScale(4, RoundingMode.HALF_UP));
         assertEquals(LocalDateTime.of(2024, 4, 30, 12, 0), exchangeRate.getLastUpdateTime());
     }
 
@@ -121,7 +121,7 @@ public class ExchangeRateMapperTestSuite {
         //When
         ExchangeRate exchangeRate = exchangeRateMapper.mapToExchangeRate(exchangeRateDto);
         //Then
-        assertEquals(new BigDecimal("0.22"), exchangeRate.getRate());
+        assertEquals(new BigDecimal("0.22"), exchangeRate.getRate().setScale(2, RoundingMode.HALF_UP));
         assertEquals(12L, exchangeRate.getId());
         assertEquals(currencyPln.getCode(), exchangeRate.getBaseCurrency().getCode());
         assertEquals(currencyPln.getName(), exchangeRate.getBaseCurrency().getName());
@@ -140,7 +140,7 @@ public class ExchangeRateMapperTestSuite {
         //When
         ExchangeRateDto exchangeRateDto = exchangeRateMapper.mapToExchangeRateDto(exchangeRate);
         //Then
-        assertEquals(new BigDecimal("0.22"), exchangeRateDto.getRate());
+        assertEquals(new BigDecimal("0.22"), exchangeRateDto.getRate().setScale(2, RoundingMode.HALF_UP));
         assertEquals(12L, exchangeRateDto.getId());
         assertEquals(currencyPln.getId(), exchangeRateDto.getBaseCurrencyId());
         assertEquals(currencyUsd.getId(), exchangeRateDto.getTargetCurrencyId());

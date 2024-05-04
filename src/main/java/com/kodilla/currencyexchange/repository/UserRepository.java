@@ -20,4 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByActiveTrue();
 
+    Optional<User> findByLoginAndPasswordAndActiveTrue(String login, String password);
+
+    boolean existsByEmailAddressAndActiveTrue(String email);
+
+    boolean existsByLoginAndActiveTrue(String login);
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/offices")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class StationaryOfficeController {
 
     private final StationaryOfficeService stationaryOfficeService;

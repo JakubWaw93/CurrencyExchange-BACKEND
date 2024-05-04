@@ -12,6 +12,7 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long
     Optional<ExchangeRate> findByBaseCurrencyCodeAndTargetCurrencyCode(String baseCurrencyCode, String targetCurrencyCode);
     List<ExchangeRate> findAllByBaseCurrencyCode(String currencyCode);
     List<ExchangeRate> findAllByTargetCurrencyCode(String currencyCode);
+    Boolean existsByBaseCurrencyCodeAndTargetCurrencyCode(String baseCode, String targetCode);
 
 
 }

@@ -2,6 +2,8 @@ package com.kodilla.currencyexchange.service;
 
 import com.kodilla.currencyexchange.domain.User;
 import com.kodilla.currencyexchange.exception.UserNotFoundException;
+import com.kodilla.currencyexchange.exception.EmailAddressAlreadyInUseException;
+import com.kodilla.currencyexchange.exception.LoginAlreadyInUseException;
 import com.kodilla.currencyexchange.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,14 @@ public class UserService {
         return userRepository.findByEmailAddressAndActiveTrue(email).orElseThrow(UserNotFoundException::new);
     }
 
-    public User saveUser(final User user) {
+    public User createUser(final User user) throws EmailAddressAlreadyInUseException, LoginAlreadyInUseException {
+        if (user.getId()==null) {
+            if (userRepository.existsByEmailAddressAndActiveTrue(user.getEmailAddress())) {
+                throw new EmailAddressAlreadyInUseException("Email already in use.");
+            } else if (userRepository.existsByLoginAndActiveTrue(user.getLogin())) {
+                throw new LoginAlreadyInUseException("Login already in use");
+            }
+        }
         return userRepository.save(user);
     }
 
@@ -49,5 +58,13 @@ public class UserService {
         user.setApiKeyExpiration(expiration);
         userRepository.save(user);
         return "API key generated successfully and will expire in 1 hour.";
+    }
+
+    public boolean loginAuthentication(String login, String password) {
+        if (userRepository.findByLoginAndPasswordAndActiveTrue(login, password).isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

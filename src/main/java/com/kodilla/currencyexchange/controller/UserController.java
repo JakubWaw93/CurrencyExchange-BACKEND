@@ -1,8 +1,11 @@
 package com.kodilla.currencyexchange.controller;
 
+import com.kodilla.currencyexchange.domain.LoginRequestDto;
 import com.kodilla.currencyexchange.domain.User;
 import com.kodilla.currencyexchange.domain.UserDto;
+import com.kodilla.currencyexchange.exception.EmailAddressAlreadyInUseException;
 import com.kodilla.currencyexchange.exception.FailedToGenerateApiKeyException;
+import com.kodilla.currencyexchange.exception.LoginAlreadyInUseException;
 import com.kodilla.currencyexchange.exception.UserNotFoundException;
 import com.kodilla.currencyexchange.mapper.UserMapper;
 import com.kodilla.currencyexchange.service.UserService;
@@ -15,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@CrossOrigin("*")
 public class UserController {
 
     private final UserService userService;
@@ -39,16 +43,20 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> createUser(@RequestBody UserDto userDto) {
         User user = userMapper.mapToUser(userDto);
-        userService.saveUser(user);
-        return ResponseEntity.ok().build();
+        try {
+            userService.createUser(user);
+            return ResponseEntity.ok("User registered successfully");
+        } catch (EmailAddressAlreadyInUseException | LoginAlreadyInUseException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) throws EmailAddressAlreadyInUseException, LoginAlreadyInUseException {
         User user = userMapper.mapToUser(userDto);
-        User savedUser = userService.saveUser(user);
+        User savedUser = userService.createUser(user);
         return ResponseEntity.ok(userMapper.mapToUserDto(savedUser));
     }
 
@@ -67,6 +75,17 @@ public class UserController {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             throw new FailedToGenerateApiKeyException();
+        }
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity<String> authenticateUser(@RequestBody LoginRequestDto loginRequest) {
+        boolean isAuthenticated = userService.loginAuthentication(loginRequest.getLogin(), loginRequest.getPassword());
+
+        if (isAuthenticated) {
+            return ResponseEntity.ok().body("Authentication successful");
+        } else {
+            return ResponseEntity.status(401).body("Invalid login credentials");
         }
     }
 }

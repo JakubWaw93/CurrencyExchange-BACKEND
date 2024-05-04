@@ -15,8 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -36,7 +35,8 @@ public class NbpClient {
     private final CurrencyRepository currencyRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(NbpClient.class);
 
-    @Scheduled(cron = "0/15 0 * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
+    @Transactional
     public void updateExchangeRates() {
         List<String> tables = Arrays.asList("a", "b", "c");
         List<Currency> currencies = currencyService.getAllStandardCurrencies();

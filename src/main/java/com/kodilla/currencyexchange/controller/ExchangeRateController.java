@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/exchangerates")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ExchangeRateController {
 
     private final ExchangeRateService exchangeRateService;
@@ -39,9 +40,15 @@ public class ExchangeRateController {
         return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDto(exchangeRate));
     }
 
-    @GetMapping("currencyCode/{baseCode}")
-    public ResponseEntity<List<ExchangeRateDto>> getRatesForCurrencyByCode(@PathVariable String baseCode) {
-        List<ExchangeRate> exchangeRatesForThisCurrency = exchangeRateService.getExchangeRatesForCurrencyByItsCode(baseCode);
+    @GetMapping("code/base/{baseCode}")
+    public ResponseEntity<List<ExchangeRateDto>> getRatesByBaseCurrencyCode(@PathVariable String baseCode) {
+        List<ExchangeRate> exchangeRatesForThisCurrency = exchangeRateService.getExchangeRatesByBaseCurrencyCode(baseCode);
+        return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDtoList(exchangeRatesForThisCurrency));
+    }
+
+    @GetMapping("code/target/{targetCode}")
+    public ResponseEntity<List<ExchangeRateDto>> getRatesByTargetCurrencyCode(@PathVariable String targetCode) {
+        List<ExchangeRate> exchangeRatesForThisCurrency = exchangeRateService.getExchangeRatesByTargetCurrencyCode(targetCode);
         return ResponseEntity.ok(exchangeRateMapper.mapToExchangeRateDtoList(exchangeRatesForThisCurrency));
     }
 

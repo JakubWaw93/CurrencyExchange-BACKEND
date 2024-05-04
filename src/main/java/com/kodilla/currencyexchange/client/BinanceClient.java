@@ -12,15 +12,11 @@ import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import com.kodilla.currencyexchange.service.CurrencyService;
 import com.kodilla.currencyexchange.service.ExchangeRateService;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -39,7 +35,8 @@ public class BinanceClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(BinanceClient.class);
 
 
-    @Scheduled(cron = "0/15 0 * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
+    @Transactional
     public void updateExchangeRates() {
         List<Currency> currencies = currencyService.getAllCryptoCurrencies();
         currencies.forEach(currency -> {

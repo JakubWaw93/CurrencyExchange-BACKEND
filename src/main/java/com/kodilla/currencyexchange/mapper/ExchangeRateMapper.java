@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ExchangeRateMapper {
         return ExchangeRate.builder()
                 .baseCurrency(currencyRepository.findByCodeAndActiveTrue(response.getCode()).orElseThrow(CurrencyNotFoundException::new))
                 .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
-                .rate(response.getRates().get(0).getMid())
+                .rate(response.getRates().get(0).getMid().setScale(10, RoundingMode.HALF_UP))
                 .lastUpdateTime(LocalDateTime.of(response.getRates().get(0).getEffectiveDate(), LocalTime.of(12,0)))
                 .build();
     }
@@ -42,7 +43,7 @@ public class ExchangeRateMapper {
                 .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
                 .rate(new BigDecimal(response.getPrice())
                         .multiply(exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode("USD", "PLN")
-                                .orElseThrow(ExchangeRateNotFoundException::new).getRate()))
+                                .orElseThrow(ExchangeRateNotFoundException::new).getRate()).setScale(10, RoundingMode.HALF_UP))
                 .lastUpdateTime(LocalDateTime.now())
                 .build();
     }
@@ -58,7 +59,7 @@ public class ExchangeRateMapper {
                 .baseCurrency(currencyRepository.findByIdAndActiveTrue(exchangeRateDto.getBaseCurrencyId()).orElseThrow(CurrencyNotFoundException::new))
                 .targetCurrency(currencyRepository.findByIdAndActiveTrue(exchangeRateDto.getTargetCurrencyId()).orElseThrow(CurrencyNotFoundException::new))
                 .transactions(transactions)
-                .rate(exchangeRateDto.getRate())
+                .rate(exchangeRateDto.getRate().setScale(10, RoundingMode.HALF_UP))
                 .lastUpdateTime(exchangeRateDto.getLastUpdateTime())
                 .build();
     }
@@ -72,8 +73,10 @@ public class ExchangeRateMapper {
                 .baseCurrencyId(exchangeRate.getBaseCurrency().getId())
                 .targetCurrencyId(exchangeRate.getTargetCurrency().getId())
                 .transactionsIds(transactionsIds)
-                .rate(exchangeRate.getRate())
+                .rate(exchangeRate.getRate().setScale(10, RoundingMode.HALF_UP))
                 .lastUpdateTime(exchangeRate.getLastUpdateTime())
+                .baseCurrencyCode(exchangeRate.getBaseCurrency().getCode())
+                .targetCurrencyCode(exchangeRate.getTargetCurrency().getCode())
                 .build();
     }
 

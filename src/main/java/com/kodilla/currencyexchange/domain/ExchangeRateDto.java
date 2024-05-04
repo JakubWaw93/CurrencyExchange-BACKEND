@@ -21,13 +21,19 @@ public class ExchangeRateDto {
     private BigDecimal rate;
     private LocalDateTime lastUpdateTime;
 
-    public ExchangeRateDto(Long id, Long baseCurrencyId, Long targetCurrencyId, List<Long> transactionsIds,
-                           BigDecimal rate, LocalDateTime lastUpdateTime) {
+    private String baseCurrencyCode;
+    private String targetCurrencyCode;
+
+    public ExchangeRateDto(Long id, Long baseCurrencyId, Long targetCurrencyId,
+                           List<Long> transactionsIds, BigDecimal rate, LocalDateTime lastUpdateTime,
+                           String baseCurrencyCode, String targetCurrencyCode) {
         this.id = id;
         this.baseCurrencyId = baseCurrencyId;
         this.targetCurrencyId = targetCurrencyId;
-        this.transactionsIds = new ArrayList<>();
+        this.transactionsIds = transactionsIds;
         this.rate = rate;
         this.lastUpdateTime = lastUpdateTime;
+        this.baseCurrencyCode = baseCurrencyCode;
+        this.targetCurrencyCode = targetCurrencyCode;
     }
 }
