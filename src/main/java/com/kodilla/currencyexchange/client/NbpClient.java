@@ -1,5 +1,6 @@
 package com.kodilla.currencyexchange.client;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kodilla.currencyexchange.configuration.WebClientConfig;
 import com.kodilla.currencyexchange.domain.Currency;
@@ -15,15 +16,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.RoundingMode;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class NbpClient {
 
@@ -31,6 +34,7 @@ public class NbpClient {
     private final ExchangeRateService exchangeRateService;
     private final WebClientConfig webClientConfig;
     private final ObjectMapper objectMapper;
+
     private final ExchangeRateMapper exchangeRateMapper;
     private final CurrencyRepository currencyRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(NbpClient.class);
@@ -50,7 +54,7 @@ public class NbpClient {
                     existingExchangeRate = null;
                 }
                 if (existingExchangeRate != null) {
-                    existingExchangeRate.setRate(exchangeRate.getRate());
+                    existingExchangeRate.setRate(exchangeRate.getRate().setScale(8, RoundingMode.HALF_UP));
                     existingExchangeRate.setLastUpdateTime(exchangeRate.getLastUpdateTime());
                     exchangeRateService.saveExchangeRate(existingExchangeRate);
                 } else {
@@ -71,6 +75,7 @@ public class NbpClient {
                 .bodyToMono(String.class)
                 .block();
 
+        objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         try {
             NbpExchangeRateResponse response = objectMapper.readValue(responseBody, NbpExchangeRateResponse.class);
             return exchangeRateMapper.mapNbpResponseToExchangeRate(response);

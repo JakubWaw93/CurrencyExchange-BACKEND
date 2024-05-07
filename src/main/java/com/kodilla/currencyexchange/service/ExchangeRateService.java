@@ -1,11 +1,14 @@
 package com.kodilla.currencyexchange.service;
 
+import com.kodilla.currencyexchange.client.BinanceClient;
+import com.kodilla.currencyexchange.client.NbpClient;
 import com.kodilla.currencyexchange.domain.Currency;
 import com.kodilla.currencyexchange.domain.ExchangeRate;
 import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
 import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
 import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import com.kodilla.currencyexchange.repository.ExchangeRateRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -64,7 +67,10 @@ public class ExchangeRateService {
         return exchangeRateRepository.save(exchangeRate);
     }
 
-    @Scheduled(cron = "0 0/5 * * * ?")
+
+
+    @Scheduled(cron = "0 0/10 * * * ?")
+    @PostConstruct
     @Transactional
     public void calculateAndSaveMissingExchangeRates() throws CurrencyNotFoundException {
         addNecessaryCurrencies();
@@ -140,7 +146,7 @@ public class ExchangeRateService {
             exchangeRateRepository.save(ExchangeRate.builder()
                     .baseCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
                     .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
-                    .rate(BigDecimal.ONE)
+                    .rate(BigDecimal.ONE.setScale(10, RoundingMode.HALF_UP))
                     .lastUpdateTime(LocalDateTime.now())
                     .build());
         }

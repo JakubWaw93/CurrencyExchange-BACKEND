@@ -31,13 +31,13 @@ public class NbpClientTestSuite {
     @Autowired
     private CurrencyRepository currencyRepository;
 
-    @AfterEach
+    //@AfterEach
     void cleanUp() {
         exchangeRateRepository.deleteAll();
         currencyRepository.deleteAll();
     }
 
-    @BeforeEach
+    //@BeforeEach
     void addCurrencyAndExchangeRate() {
         Currency currencyPln = Currency.builder()
                 .code("PLN")

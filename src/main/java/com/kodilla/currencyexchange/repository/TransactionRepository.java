@@ -11,5 +11,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findAllByUserId(Long userId);
     List<Transaction> findAllByStatusIs(TransactionStatus transactionStatus);
+    List<Transaction> findAllByUserLogin(String userLogin);
 
 }

@@ -18,8 +18,12 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public List<Transaction> getAllUserTransaction(final Long userId) {
+    public List<Transaction> getAllTransactionsByUserId(final Long userId) {
         return transactionRepository.findAllByUserId(userId);
+    }
+
+    public List<Transaction> getAllTransactionsByUserLogin(final String login) {
+        return transactionRepository.findAllByUserLogin(login);
     }
 
     public Transaction getTransactionById(final Long transactionId) throws TransactionNotFoundException {

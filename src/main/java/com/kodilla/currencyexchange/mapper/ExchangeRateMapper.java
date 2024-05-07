@@ -32,7 +32,7 @@ public class ExchangeRateMapper {
         return ExchangeRate.builder()
                 .baseCurrency(currencyRepository.findByCodeAndActiveTrue(response.getCode()).orElseThrow(CurrencyNotFoundException::new))
                 .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
-                .rate(response.getRates().get(0).getMid().setScale(10, RoundingMode.HALF_UP))
+                .rate(response.getRates().get(0).getMid().setScale(10, RoundingMode.HALF_DOWN))
                 .lastUpdateTime(LocalDateTime.of(response.getRates().get(0).getEffectiveDate(), LocalTime.of(12,0)))
                 .build();
     }
@@ -41,7 +41,7 @@ public class ExchangeRateMapper {
         return ExchangeRate.builder()
                 .baseCurrency(currencyRepository.findByCodeAndActiveTrue(baseCurrencyCode).orElseThrow(CurrencyNotFoundException::new))
                 .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
-                .rate(new BigDecimal(response.getPrice())
+                .rate(new BigDecimal(response.getPrice()).setScale(10, RoundingMode.HALF_UP)
                         .multiply(exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode("USD", "PLN")
                                 .orElseThrow(ExchangeRateNotFoundException::new).getRate()).setScale(10, RoundingMode.HALF_UP))
                 .lastUpdateTime(LocalDateTime.now())

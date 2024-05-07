@@ -29,9 +29,15 @@ public class TransactionController {
         return ResponseEntity.ok(transactionMapper.mapToTransactionDtoList(transactions));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TransactionDto>> getAllTransactionsFromUser(@PathVariable Long userId) {
-        List<Transaction> transactions = transactionService.getAllUserTransaction(userId);
+    @GetMapping("/userid/{userId}")
+    public ResponseEntity<List<TransactionDto>> getAllTransactionsByUserId(@PathVariable Long userId) {
+        List<Transaction> transactions = transactionService.getAllTransactionsByUserId(userId);
+        return ResponseEntity.ok(transactionMapper.mapToTransactionDtoList(transactions));
+    }
+
+    @GetMapping("/userlogin/{userLogin}")
+    public ResponseEntity<List<TransactionDto>> getAllTransactionsByUserLogin(@PathVariable String userLogin) {
+        List<Transaction> transactions = transactionService.getAllTransactionsByUserLogin(userLogin);
         return ResponseEntity.ok(transactionMapper.mapToTransactionDtoList(transactions));
     }
 

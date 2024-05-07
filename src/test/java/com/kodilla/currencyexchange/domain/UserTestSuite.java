@@ -34,10 +34,6 @@ public class UserTestSuite {
                 .build();
     }
 
-    @BeforeEach
-    public void cleanUpBefore() {
-        userRepository.deleteAll();
-    }
     @AfterEach
     public void cleanUp() {
         userRepository.deleteAll();
@@ -45,6 +41,17 @@ public class UserTestSuite {
 
     @Test
     void testSaveUserAndFindById() {
+        //Given
+        //When
+        userRepository.save(user);
+        Optional<User> retrievedUser = userRepository.findByEmailAddressAndActiveTrue(user.getEmailAddress());
+        //Then
+        assertTrue(retrievedUser.isPresent());
+        assertEquals("Kowalski", retrievedUser.get().getLastname());
+    }
+
+    @Test
+    void testGetUserByEmail() {
         //Given
         //When
         userRepository.save(user);
