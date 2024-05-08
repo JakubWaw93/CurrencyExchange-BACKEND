@@ -70,11 +70,8 @@ public class ExchangeRateService {
 
 
     @Scheduled(cron = "0 0/10 * * * ?")
-    @PostConstruct
     @Transactional
     public void calculateAndSaveMissingExchangeRates() throws CurrencyNotFoundException {
-        addNecessaryCurrencies();
-        addPlnToPlnExchangeRate();
         List<ExchangeRate> updates = new ArrayList<>();
         List<ExchangeRate> plnExchangeRates = exchangeRateRepository.findAllByTargetCurrencyCode("PLN");
 
@@ -122,6 +119,7 @@ public class ExchangeRateService {
         return BigDecimal.ONE.divide(result, 10, RoundingMode.HALF_UP).setScale(10, RoundingMode.HALF_UP);
     }
 
+    @PostConstruct
     private void addNecessaryCurrencies() {
         if (!currencyRepository.existsByCode("PLN")) {
             Currency currencyPln = Currency.builder()
@@ -141,16 +139,22 @@ public class ExchangeRateService {
         }
     }
 
-    private void addPlnToPlnExchangeRate() throws CurrencyNotFoundException {
+    //@PostConstruct
+    private void addPlnToPln() throws CurrencyNotFoundException {
         if (!exchangeRateRepository.existsByBaseCurrencyCodeAndTargetCurrencyCode("PLN", "PLN")) {
+            Currency currencyPln = currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new);
+            if (!entityManager.contains(currencyPln)) {
+                currencyPln = entityManager.merge(currencyPln);
+            }
             exchangeRateRepository.save(ExchangeRate.builder()
-                    .baseCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
-                    .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
-                    .rate(BigDecimal.ONE.setScale(10, RoundingMode.HALF_UP))
+                    .baseCurrency(currencyPln)
+                    .targetCurrency(currencyPln)
+                    .rate(BigDecimal.ONE)
                     .lastUpdateTime(LocalDateTime.now())
                     .build());
         }
     }
+
 
 
 }

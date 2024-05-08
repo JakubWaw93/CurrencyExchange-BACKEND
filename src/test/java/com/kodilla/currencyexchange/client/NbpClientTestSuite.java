@@ -31,34 +31,12 @@ public class NbpClientTestSuite {
     @Autowired
     private CurrencyRepository currencyRepository;
 
-    //@AfterEach
+    @AfterEach
     void cleanUp() {
         exchangeRateRepository.deleteAll();
         currencyRepository.deleteAll();
     }
 
-    //@BeforeEach
-    void addCurrencyAndExchangeRate() {
-        Currency currencyPln = Currency.builder()
-                .code("PLN")
-                .name("Polski Złoty")
-                .crypto(false)
-                .build();
-
-        Currency currencyUsd = Currency.builder()
-                .code("USD")
-                .name("Amerykański Dollar")
-                .crypto(false)
-                .build();
-
-        ExchangeRate exchangeRateUsdToPln = ExchangeRate.builder()
-                .rate(new BigDecimal("4.0845"))
-                .baseCurrency(currencyUsd)
-                .targetCurrency(currencyPln)
-                .lastUpdateTime(LocalDateTime.now())
-                .build();
-        exchangeRateRepository.save(exchangeRateUsdToPln);
-    }
 
     @Test
     void testGetExchangeRateFromNbpApi() {

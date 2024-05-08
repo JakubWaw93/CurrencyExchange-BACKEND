@@ -2,6 +2,7 @@ package com.kodilla.currencyexchange.client;
 
 import com.kodilla.currencyexchange.domain.Currency;
 import com.kodilla.currencyexchange.domain.ExchangeRate;
+import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
 import com.kodilla.currencyexchange.exception.ExchangeRateNotFoundException;
 import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import com.kodilla.currencyexchange.repository.ExchangeRateRepository;
@@ -36,18 +37,7 @@ public class BinanceClientTestSuite {
     }
 
     @BeforeEach
-    void addCurrencyAndExchangeRate() {
-        Currency currencyPln = Currency.builder()
-                .code("PLN")
-                .name("Polski Złoty")
-                .crypto(false)
-                .build();
-
-        Currency currencyUsd = Currency.builder()
-                .code("USD")
-                .name("American Dollar")
-                .crypto(false)
-                .build();
+    @Transactional void addCurrencyAndExchangeRate() throws CurrencyNotFoundException {
 
         Currency currencyBtc = Currency.builder()
                 .code("BTC")
@@ -58,8 +48,8 @@ public class BinanceClientTestSuite {
 
         ExchangeRate exchangeRateUsdToPln = ExchangeRate.builder()
                 .rate(new BigDecimal("4.0845"))
-                .baseCurrency(currencyUsd)
-                .targetCurrency(currencyPln)
+                .baseCurrency(currencyRepository.findByCodeAndActiveTrue("USD").orElseThrow(CurrencyNotFoundException::new))
+                .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
                 .lastUpdateTime(LocalDateTime.now())
                 .build();
         exchangeRateRepository.save(exchangeRateUsdToPln);

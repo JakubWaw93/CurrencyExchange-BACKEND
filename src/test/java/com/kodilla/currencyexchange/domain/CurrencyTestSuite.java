@@ -26,13 +26,13 @@ public class CurrencyTestSuite {
     @BeforeEach
     public void createCurrency() {
         currency1 = Currency.builder()
-                .code("PLN")
-                .name("Zloty Polski")
+                .code("AAA")
+                .name("Waluta AAA")
                 .crypto(false)
                 .build();
         currency2 = Currency.builder()
-                .code("USD")
-                .name("American Dollar")
+                .code("BBB")
+                .name("Waluta BBB")
                 .crypto(false)
                 .active(false)
                 .build();
@@ -58,8 +58,8 @@ public class CurrencyTestSuite {
         assertNotNull(retrievedCurrency.get().getId());
         assertTrue(retrievedCurrency.get().isActive());
         assertFalse(retrievedCurrency.get().isCrypto());
-        assertEquals("PLN", retrievedCurrency.get().getCode());
-        assertTrue(currencyRepository.existsByCode("PLN"));
+        assertEquals("AAA", retrievedCurrency.get().getCode());
+        assertTrue(currencyRepository.existsByCode("AAA"));
         assertFalse(currencyRepository.existsByCode("ETH"));
     }
 

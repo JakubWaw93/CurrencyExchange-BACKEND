@@ -33,31 +33,31 @@ public class TransactionMapperTestSuite {
     private ExchangeRateRepository exchangeRateRepository;
 
     private User user;
-    private Currency currencyPln;
-    private Currency currencyUsd;
-    private ExchangeRate exchangeRateUsdToPln;
+    private Currency currencyAaa;
+    private Currency currencyBbb;
+    private ExchangeRate exchangeRateBbbtoAaa;
     private LocalDateTime transactionDate = LocalDateTime.of(2024, 4, 30, 12,15);
 
     @BeforeEach
     void setEnvironment() {
-        currencyPln = Currency.builder()
-                .code("PLN")
-                .name("Zloty Polski")
+        currencyAaa = Currency.builder()
+                .code("AAA")
+                .name("Waluta AAA")
                 .crypto(false)
                 .build();
-        currencyUsd = Currency.builder()
-                .code("USD")
-                .name("American Dollar")
+        currencyBbb = Currency.builder()
+                .code("BBB")
+                .name("Waluta BBB")
                 .crypto(false)
                 .build();
 
-        exchangeRateUsdToPln = ExchangeRate.builder()
+        exchangeRateBbbtoAaa = ExchangeRate.builder()
                 .rate(new BigDecimal("4.5"))
-                .baseCurrency(currencyUsd)
-                .targetCurrency(currencyPln)
+                .baseCurrency(currencyBbb)
+                .targetCurrency(currencyAaa)
                 .lastUpdateTime(LocalDateTime.now())
                 .build();
-        exchangeRateRepository.save(exchangeRateUsdToPln);
+        exchangeRateRepository.save(exchangeRateBbbtoAaa);
 
         user = User.builder()
                 .apiKey("123456789")
@@ -85,9 +85,9 @@ public class TransactionMapperTestSuite {
                 .status(TransactionStatus.SUCCEED.name())
                 .userId(user.getId())
                 .transactionDate(transactionDate)
-                .soldCurrencyId(currencyUsd.getId())
-                .boughtCurrencyId(currencyPln.getId())
-                .exchangeRateId(exchangeRateUsdToPln.getId())
+                .soldCurrencyId(currencyBbb.getId())
+                .boughtCurrencyId(currencyAaa.getId())
+                .exchangeRateId(exchangeRateBbbtoAaa.getId())
                 .amountBoughtCurrency(new BigDecimal("120000"))
                 .build();
         //When
@@ -96,9 +96,9 @@ public class TransactionMapperTestSuite {
         assertEquals(111L, transaction.getId());
         assertEquals("SUCCEED", transaction.getStatus().name());
         assertEquals(transactionDate, transaction.getTransactionDate());
-        assertEquals(currencyPln.getId(), transaction.getBoughtCurrency().getId());
-        assertEquals(currencyUsd.getId(), transaction.getSoldCurrency().getId());
-        assertEquals(exchangeRateUsdToPln.getId(), transaction.getExchangeRate().getId());
+        assertEquals(currencyAaa.getId(), transaction.getBoughtCurrency().getId());
+        assertEquals(currencyBbb.getId(), transaction.getSoldCurrency().getId());
+        assertEquals(exchangeRateBbbtoAaa.getId(), transaction.getExchangeRate().getId());
         assertEquals(new BigDecimal("120000"), transaction.getAmountBoughtCurrency());
     }
 
@@ -110,9 +110,9 @@ public class TransactionMapperTestSuite {
                 .status(TransactionStatus.SUCCEED)
                 .user(user)
                 .transactionDate(transactionDate)
-                .soldCurrency(currencyUsd)
-                .boughtCurrency(currencyPln)
-                .exchangeRate(exchangeRateUsdToPln)
+                .soldCurrency(currencyBbb)
+                .boughtCurrency(currencyAaa)
+                .exchangeRate(exchangeRateBbbtoAaa)
                 .amountBoughtCurrency(new BigDecimal("120000"))
                 .build();
         //When
@@ -121,9 +121,9 @@ public class TransactionMapperTestSuite {
         assertEquals(111L, transactionDto.getId());
         assertEquals("SUCCEED", transactionDto.getStatus());
         assertEquals(transactionDate, transactionDto.getTransactionDate());
-        assertEquals(currencyPln.getId(), transactionDto.getBoughtCurrencyId());
-        assertEquals(currencyUsd.getId(), transactionDto.getSoldCurrencyId());
-        assertEquals(exchangeRateUsdToPln.getId(), transactionDto.getExchangeRateId());
+        assertEquals(currencyAaa.getId(), transactionDto.getBoughtCurrencyId());
+        assertEquals(currencyBbb.getId(), transactionDto.getSoldCurrencyId());
+        assertEquals(exchangeRateBbbtoAaa.getId(), transactionDto.getExchangeRateId());
         assertEquals(new BigDecimal("120000"), transactionDto.getAmountBoughtCurrency());
     }
 
@@ -135,9 +135,9 @@ public class TransactionMapperTestSuite {
                 .status(TransactionStatus.SUCCEED)
                 .user(user)
                 .transactionDate(transactionDate)
-                .soldCurrency(currencyUsd)
-                .boughtCurrency(currencyPln)
-                .exchangeRate(exchangeRateUsdToPln)
+                .soldCurrency(currencyBbb)
+                .boughtCurrency(currencyAaa)
+                .exchangeRate(exchangeRateBbbtoAaa)
                 .amountBoughtCurrency(new BigDecimal("120000"))
                 .build();
 
@@ -146,9 +146,9 @@ public class TransactionMapperTestSuite {
                 .status(TransactionStatus.FAILED)
                 .user(user)
                 .transactionDate(transactionDate.minusHours(2))
-                .soldCurrency(currencyUsd)
-                .boughtCurrency(currencyPln)
-                .exchangeRate(exchangeRateUsdToPln)
+                .soldCurrency(currencyBbb)
+                .boughtCurrency(currencyAaa)
+                .exchangeRate(exchangeRateBbbtoAaa)
                 .amountBoughtCurrency(new BigDecimal("120000"))
                 .build();
 
@@ -164,9 +164,9 @@ public class TransactionMapperTestSuite {
         assertEquals(86, transactionDtoList.get(1).getId());
         assertEquals("FAILED", transactionDtoList.get(1).getStatus());
         assertEquals(transactionDate.minusHours(2), transactionDtoList.get(1).getTransactionDate());
-        assertEquals(currencyPln.getId(), transactionDtoList.get(1).getBoughtCurrencyId());
-        assertEquals(currencyUsd.getId(), transactionDtoList.get(1).getSoldCurrencyId());
-        assertEquals(exchangeRateUsdToPln.getId(), transactionDtoList.get(1).getExchangeRateId());
+        assertEquals(currencyAaa.getId(), transactionDtoList.get(1).getBoughtCurrencyId());
+        assertEquals(currencyBbb.getId(), transactionDtoList.get(1).getSoldCurrencyId());
+        assertEquals(exchangeRateBbbtoAaa.getId(), transactionDtoList.get(1).getExchangeRateId());
         assertEquals(new BigDecimal("120000"), transactionDtoList.get(1).getAmountBoughtCurrency());
     }
 }

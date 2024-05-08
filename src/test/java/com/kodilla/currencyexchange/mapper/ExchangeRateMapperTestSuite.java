@@ -44,17 +44,9 @@ public class ExchangeRateMapperTestSuite {
     private ExchangeRate exchangeRateUsdToPln;
 
     @BeforeEach
-    void setEnvironment() {
-        currencyPln = Currency.builder()
-                .code("PLN")
-                .name("Zloty Polski")
-                .crypto(false)
-                .build();
-        currencyUsd = Currency.builder()
-                .code("USD")
-                .name("American Dollar")
-                .crypto(false)
-                .build();
+    void setEnvironment() throws CurrencyNotFoundException {
+        currencyPln = currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new);
+        currencyUsd = currencyRepository.findByCodeAndActiveTrue("USD").orElseThrow(CurrencyNotFoundException::new);
         currencyBtc = Currency.builder()
                 .code("BTC")
                 .name("Bitcoin")
@@ -75,6 +67,7 @@ public class ExchangeRateMapperTestSuite {
     @AfterEach
     void cleanUp() {
         currencyRepository.deleteAll();
+        exchangeRateRepository.deleteAll();
     }
 
     @Test
@@ -89,7 +82,7 @@ public class ExchangeRateMapperTestSuite {
         //Then
         assertEquals("USD", exchangeRate.getBaseCurrency().getCode());
         assertEquals(new BigDecimal("4.0341"), exchangeRate.getRate().setScale(4, RoundingMode.HALF_UP));
-        assertEquals(LocalDateTime.of(2024, 4, 30, 12, 0), exchangeRate.getLastUpdateTime());
+        assertEquals(LocalDateTime.of(2024, 4, 30, 0, 0), exchangeRate.getLastUpdateTime());
     }
 
     @Test

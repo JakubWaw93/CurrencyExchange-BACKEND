@@ -55,9 +55,10 @@ public class CurrencyController {
     }
 
     @PutMapping
-    public ResponseEntity<CurrencyDto> updateCurrency(@RequestBody CurrencyDto currencyDto) {
+    public ResponseEntity<CurrencyDto> updateCurrency(@RequestBody CurrencyDto currencyDto) throws CurrencyNotFoundException {
         Currency currency = currencyMapper.mapToCurrency(currencyDto);
-        Currency savedCurrency = currencyService.saveCurrency(currency);
+        currencyService.saveCurrency(currency);
+        Currency savedCurrency = currencyService.getCurrencyById(currency.getId());
         return ResponseEntity.ok(currencyMapper.mapToCurrencyDto(savedCurrency));
     }
 

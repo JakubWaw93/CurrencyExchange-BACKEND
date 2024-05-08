@@ -30,6 +30,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework:spring-webflux:6.0.19'
     implementation 'org.hibernate:hibernate-envers:6.2.4.Final'
+    testImplementation 'com.google.code.gson:gson'
+    implementation 'com.google.code.gson:gson:2.9.0'
+
 }
 
 tasks.named('bootBuildImage') {

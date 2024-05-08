@@ -33,7 +33,7 @@ public class ExchangeRateMapper {
                 .baseCurrency(currencyRepository.findByCodeAndActiveTrue(response.getCode()).orElseThrow(CurrencyNotFoundException::new))
                 .targetCurrency(currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new))
                 .rate(response.getRates().get(0).getMid().setScale(10, RoundingMode.HALF_DOWN))
-                .lastUpdateTime(LocalDateTime.of(response.getRates().get(0).getEffectiveDate(), LocalTime.of(12,0)))
+                .lastUpdateTime(LocalDateTime.of(response.getRates().get(0).getEffectiveDate(), LocalTime.of(0,0)))
                 .build();
     }
 

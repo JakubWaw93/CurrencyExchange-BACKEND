@@ -40,9 +40,10 @@ public class StationaryOfficeController {
     }
 
     @PutMapping
-    public ResponseEntity<StationaryOfficeDto> updateOffice(@RequestBody StationaryOfficeDto stationaryOfficeDto) {
+    public ResponseEntity<StationaryOfficeDto> updateOffice(@RequestBody StationaryOfficeDto stationaryOfficeDto) throws StationaryOfficeNotFoundException {
         StationaryOffice stationaryOffice = stationaryOfficeMapper.mapToStationaryOffice(stationaryOfficeDto);
-        StationaryOffice savedStationaryOffice = stationaryOfficeService.saveStationaryOffice(stationaryOffice);
+        stationaryOfficeService.saveStationaryOffice(stationaryOffice);
+        StationaryOffice savedStationaryOffice = stationaryOfficeService.getOfficeById(stationaryOffice.getId());
         return ResponseEntity.ok(stationaryOfficeMapper.mapToStationaryOfficeDto(savedStationaryOffice));
     }
 

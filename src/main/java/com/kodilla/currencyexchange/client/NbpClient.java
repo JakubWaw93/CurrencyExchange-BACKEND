@@ -11,6 +11,7 @@ import com.kodilla.currencyexchange.mapper.ExchangeRateMapper;
 import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import com.kodilla.currencyexchange.service.CurrencyService;
 import com.kodilla.currencyexchange.service.ExchangeRateService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

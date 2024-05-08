@@ -55,9 +55,10 @@ public class TransactionController {
     }
 
     @PutMapping
-    public ResponseEntity<TransactionDto> updateTransaction(@RequestBody TransactionDto transactionDto) throws UserNotFoundException, ExchangeRateNotFoundException, CurrencyNotFoundException {
+    public ResponseEntity<TransactionDto> updateTransaction(@RequestBody TransactionDto transactionDto) throws UserNotFoundException, ExchangeRateNotFoundException, CurrencyNotFoundException, TransactionNotFoundException {
         Transaction transaction = transactionMapper.mapToTransaction(transactionDto);
-        Transaction savedTransaction = transactionService.saveTransaction(transaction);
+        transactionService.saveTransaction(transaction);
+        Transaction savedTransaction = transactionService.getTransactionById(transaction.getId());
         return ResponseEntity.ok(transactionMapper.mapToTransactionDto(savedTransaction));
     }
 }

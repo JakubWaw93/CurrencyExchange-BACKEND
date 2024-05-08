@@ -54,9 +54,10 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) throws EmailAddressAlreadyInUseException, LoginAlreadyInUseException {
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) throws EmailAddressAlreadyInUseException, LoginAlreadyInUseException, UserNotFoundException {
         User user = userMapper.mapToUser(userDto);
-        User savedUser = userService.createUser(user);
+        userService.createUser(user);
+        User savedUser = userService.getUserById(user.getId());
         return ResponseEntity.ok(userMapper.mapToUserDto(savedUser));
     }
 

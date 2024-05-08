@@ -40,13 +40,13 @@ public class TransactionTestSuite {
     void createTransaction() {
 
         Currency currency1 = Currency.builder()
-                .code("PLN")
-                .name("Zloty Polski")
+                .code("AAA")
+                .name("Waluta AAA")
                 .crypto(false)
                 .build();
         Currency currency2 = Currency.builder()
-                .code("USD")
-                .name("American Dollar")
+                .code("BBB")
+                .name("Waluta BBB")
                 .crypto(false)
                 .active(false)
                 .build();
@@ -110,7 +110,7 @@ public class TransactionTestSuite {
         List<Transaction> transactions = transactionRepository.findAll();
         //Then
         assertEquals(1, transactions.size());
-        assertEquals("USD", transactions.get(0).getExchangeRate().getTargetCurrency().getCode());
+        assertEquals("BBB", transactions.get(0).getExchangeRate().getTargetCurrency().getCode());
     }
 
     @Test

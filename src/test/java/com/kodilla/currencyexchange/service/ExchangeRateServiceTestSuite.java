@@ -30,11 +30,11 @@ public class ExchangeRateServiceTestSuite {
     @Autowired
     private ExchangeRateRepository exchangeRateRepository;
 
-    private Currency currencyPln;
-    private Currency currencyUsd;
-    private Currency currencyBtc;
-    private ExchangeRate exchangeRateUsdToPln;
-    private ExchangeRate exchangeRateBtcToPln;
+    private Currency currencyAaa;
+    private Currency currencyBbb;
+    private Currency currencyCcc;
+    private ExchangeRate exchangeRateBbbToAaa;
+    private ExchangeRate exchangeRateCcctoAaa;
 
     @AfterEach
     void cleanUp() {
@@ -44,52 +44,49 @@ public class ExchangeRateServiceTestSuite {
 
     @BeforeEach
     void setEnvironment() {
-        currencyPln = Currency.builder()
-                .code("PLN")
-                .name("Zloty Polski")
+        currencyAaa = Currency.builder()
+                .code("AAA")
+                .name("Waluta AAA")
                 .crypto(false)
                 .build();
-        currencyUsd = Currency.builder()
-                .code("USD")
-                .name("American Dollar")
+        currencyBbb = Currency.builder()
+                .code("BBB")
+                .name("Waluta BBB")
                 .crypto(false)
                 .build();
-        currencyBtc = Currency.builder()
-                .code("BTC")
-                .name("Bitcoin")
+        currencyCcc = Currency.builder()
+                .code("CCC")
+                .name("Waluta CCC - crypto")
                 .crypto(true)
                 .build();
 
-        exchangeRateUsdToPln = ExchangeRate.builder()
+        exchangeRateBbbToAaa = ExchangeRate.builder()
                 .rate(new BigDecimal("4.5"))
-                .baseCurrency(currencyUsd)
-                .targetCurrency(currencyPln)
+                .baseCurrency(currencyBbb)
+                .targetCurrency(currencyAaa)
                 .lastUpdateTime(LocalDateTime.now())
                 .build();
-        exchangeRateRepository.save(exchangeRateUsdToPln);
+        exchangeRateRepository.save(exchangeRateBbbToAaa);
 
-        exchangeRateBtcToPln = ExchangeRate.builder()
+        exchangeRateCcctoAaa = ExchangeRate.builder()
                 .rate(new BigDecimal("246000"))
-                .baseCurrency(currencyBtc)
-                .targetCurrency(currencyPln)
+                .baseCurrency(currencyCcc)
+                .targetCurrency(currencyAaa)
                 .lastUpdateTime(LocalDateTime.now())
                 .build();
-        exchangeRateRepository.save(exchangeRateBtcToPln);
+        exchangeRateRepository.save(exchangeRateCcctoAaa);
 
     }
 
     @Test
     void testCalculateRates() throws CurrencyNotFoundException, ExchangeRateNotFoundException {
         //Given
-        String baseCurrencyCode = "BTC";
-        String targetCurrencyCode = "USD";
+        String baseCurrencyCode = "CCC";
+        String targetCurrencyCode = "BBB";
         //When
         exchangeRateService.calculateAndSaveMissingExchangeRates();
         //Then
         assertNotNull(exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode(baseCurrencyCode, targetCurrencyCode));
-        System.out.println(exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode(baseCurrencyCode, targetCurrencyCode).get().getRate());
-
-
 
     }
 }

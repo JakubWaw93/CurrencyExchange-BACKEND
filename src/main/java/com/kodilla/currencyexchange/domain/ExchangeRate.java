@@ -40,6 +40,7 @@ public class ExchangeRate {
     private List<Transaction> transactions = new ArrayList<>();
 
     @NonNull
+    @Column(precision = 16, scale = 8)
     private BigDecimal rate;
 
     @NonNull

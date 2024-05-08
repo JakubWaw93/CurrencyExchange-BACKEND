@@ -5,6 +5,8 @@ import com.kodilla.currencyexchange.repository.ExchangeRateRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,25 +25,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Transactional
 public class ExchangeRateTestSuite {
 
+
     @Autowired
-    private ExchangeRateRepository exchangeRateRepository;
+    private  ExchangeRateRepository exchangeRateRepository;
     @Autowired
-    private CurrencyRepository currencyRepository;
+    private  CurrencyRepository currencyRepository;
 
     private ExchangeRate exchangeRate;
     private LocalDateTime lastUpdate = LocalDateTime.of(LocalDate.of(2024,4,28), LocalTime.of(15,0));
+
+
 
     @BeforeEach
     void createExchangeRate() {
 
         Currency currency1 = Currency.builder()
-                .code("PLN")
-                .name("Zloty Polski")
+                .code("AAA")
+                .name("Waluta AAA")
                 .crypto(false)
                 .build();
         Currency currency2 = Currency.builder()
-                .code("USD")
-                .name("American Dollar")
+                .code("BBB")
+                .name("Waluta BBB")
                 .crypto(false)
                 .active(false)
                 .build();
@@ -82,7 +87,7 @@ public class ExchangeRateTestSuite {
         //Given
         //When
         exchangeRateRepository.save(exchangeRate);
-        Optional<ExchangeRate> retrievedExchangeRate = exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode("PLN","USD");
+        Optional<ExchangeRate> retrievedExchangeRate = exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode("AAA","BBB");
         //Then
         assertTrue(retrievedExchangeRate.isPresent());
         assertEquals(lastUpdate, retrievedExchangeRate.get().getLastUpdateTime());
