@@ -2,7 +2,7 @@ Link do aplikacji frontendowej:
 https://github.com/JakubWaw93/CurrencyExchange-FRONTEND.git
 
 Link do commita backendu z ostatnimi zmianami(poza dodaniem README.md):
-https://github.com/JakubWaw93/CurrencyExchange-BACKEND/tree/29acedb64d0e0f6ae712cfbb39c61f2a8d82470c
+https://github.com/JakubWaw93/CurrencyExchange-BACKEND/tree/f32fcef46f15ec226b1a044336e9d4e95d80faf5
 
 Instrukcja uruchomienia:
 1. Projekt wymaga bazy danych określonej w application.properties nazwą currency_exchange.

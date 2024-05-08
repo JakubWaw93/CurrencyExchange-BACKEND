@@ -139,22 +139,4 @@ public class ExchangeRateService {
         }
     }
 
-    //@PostConstruct
-    private void addPlnToPln() throws CurrencyNotFoundException {
-        if (!exchangeRateRepository.existsByBaseCurrencyCodeAndTargetCurrencyCode("PLN", "PLN")) {
-            Currency currencyPln = currencyRepository.findByCodeAndActiveTrue("PLN").orElseThrow(CurrencyNotFoundException::new);
-            if (!entityManager.contains(currencyPln)) {
-                currencyPln = entityManager.merge(currencyPln);
-            }
-            exchangeRateRepository.save(ExchangeRate.builder()
-                    .baseCurrency(currencyPln)
-                    .targetCurrency(currencyPln)
-                    .rate(BigDecimal.ONE)
-                    .lastUpdateTime(LocalDateTime.now())
-                    .build());
-        }
-    }
-
-
-
 }
