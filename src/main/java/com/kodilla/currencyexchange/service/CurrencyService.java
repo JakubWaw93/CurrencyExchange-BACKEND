@@ -1,15 +1,18 @@
 package com.kodilla.currencyexchange.service;
 
 import com.kodilla.currencyexchange.domain.Currency;
+import com.kodilla.currencyexchange.exception.CurrencyAlreadyExistException;
 import com.kodilla.currencyexchange.exception.CurrencyNotFoundException;
 import com.kodilla.currencyexchange.repository.CurrencyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CurrencyService {
 
     private final CurrencyRepository currencyRepository;
@@ -35,7 +38,13 @@ public class CurrencyService {
     }
 
     public Currency saveCurrency(final Currency currency) {
-        return currencyRepository.save(currency);
+        if (currencyRepository.findByCodeAndActiveTrue(currency.getCode()).isPresent()) {
+            log.error("Currency with code {} already exist.", currency.getCode());
+            throw new CurrencyAlreadyExistException();
+        }
+        Currency savedCurrency = currencyRepository.save(currency);
+        log.info("Currency with code {} added successfully.", currency.getCode());
+        return savedCurrency;
     }
 
     public void deleteCurrency(final Long currencyId) throws CurrencyNotFoundException {

@@ -45,6 +45,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleLoginAlreadyInUseException(LoginAlreadyInUseException exception) {
         return new ResponseEntity<>("Login already in use: " + exception, HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(CurrencyAlreadyExistException.class)
+    public ResponseEntity<Object> handleCurrencyAlreadyExistException(CurrencyAlreadyExistException exception) {
+        return new ResponseEntity<>("This currency already exists: " + "\n"+exception, HttpStatus.CONFLICT);
+    }
 
 
 }

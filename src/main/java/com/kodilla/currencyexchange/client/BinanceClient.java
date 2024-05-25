@@ -14,6 +14,7 @@ import com.kodilla.currencyexchange.service.ExchangeRateService;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,11 @@ public class BinanceClient {
     private final ObjectMapper objectMapper;
     private final ExchangeRateMapper exchangeRateMapper;
     private final CurrencyRepository currencyRepository;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BinanceClient.class);
+
+    @Value("${binance.api.base.url}")
+    private String binanceApiBaseUrl;
 
 
     @Scheduled(cron = "0 0/5 * * * ?")
@@ -92,7 +97,7 @@ public class BinanceClient {
     }
 
     private URI getUriBinance(final String baseCurrencyCode) {
-        return UriComponentsBuilder.fromHttpUrl("https://api.binance.com/api/v3/avgPrice?symbol=" + baseCurrencyCode + "USDT")
+        return UriComponentsBuilder.fromHttpUrl(binanceApiBaseUrl + baseCurrencyCode + "USDT")
                 .build()
                 .encode()
                 .toUri();

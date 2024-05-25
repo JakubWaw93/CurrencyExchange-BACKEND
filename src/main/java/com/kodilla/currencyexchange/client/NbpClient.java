@@ -15,6 +15,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,12 @@ public class NbpClient {
     private final ExchangeRateMapper exchangeRateMapper;
     private final CurrencyRepository currencyRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(NbpClient.class);
+
+    @Value("${nbp.api.base.url}")
+    private String nbpApiBaseUrl;
+
+    @Value("${nbp.api.format}")
+    private String nbpApiFormat;
 
     @Scheduled(cron = "0 0/5 * * * ?")
     @Transactional
@@ -97,7 +104,7 @@ public class NbpClient {
     }
 
     private URI getUriNbp(final String table, final String baseCurrencyCode) {
-        return UriComponentsBuilder.fromHttpUrl("https://api.nbp.pl/api/exchangerates/rates/" + table + "/" + baseCurrencyCode + "/?format=json")
+        return UriComponentsBuilder.fromHttpUrl(nbpApiBaseUrl + table + "/" + baseCurrencyCode + "/" + nbpApiFormat)
                 .build()
                 .encode()
                 .toUri();
